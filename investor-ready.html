@@ -253,7 +253,7 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
                 gapAdvice: {
                     1: "Investors fund plans, not gaps in the bank. Cost the people, technology and resources the raise buys before any conversation.",
                     2: "Break the broad list into a costed, month-by-month use of funds.",
-                    3: "Good. Now link every line to the milestone it unlocks.",
+                    3: "Good. Now link every line to the milestone it pays for.",
                     4: "Excellent. A milestone-linked ask is the mark of an investor-ready founder." } },
             { id: "q2", dimension: "Clarity of Ask", tag: "F",
                 text: "Do you know what this round must achieve to earn the next one (or reach profitability)?",
@@ -287,7 +287,7 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
                     { value: 3, text: "We track the key metrics for our model and can explain the trends." },
                     { value: 4, text: "We know our unit economics cold (acquisition cost, lifetime value, margins, payback) with evidence." } ],
                 gapAdvice: {
-                    1: "Vision opens the meeting; numbers close the round. Instrument the business now.",
+                    1: "Vision opens the meeting; numbers close the round. Measure the business now.",
                     2: "Add depth: cohorts, retention, margins, whatever proves your model works.",
                     3: "Good. Be ready to defend every trend line under questioning.",
                     4: "Excellent. Founders who know their unit economics cold command the room, and the valuation." } },
@@ -357,12 +357,12 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
                     { value: 1, text: "Cold emails and online applications." },
                     { value: 2, text: "Mostly cold, with one or two possible introductions." },
                     { value: 3, text: "We have mapped warm routes to a good share of the list." },
-                    { value: 4, text: "A warm-introduction path mapped to most of the shortlist, with introducers briefed and sequenced." } ],
+                    { value: 4, text: "A warm-introduction path mapped to most of the shortlist, with introducers briefed and the order of approaches decided." } ],
                 gapAdvice: {
                     1: "Warm introductions convert many times better than cold approaches. Map your network before you launch the raise.",
                     2: "Work your network deliberately, second-degree connections cover more of your list than you think.",
                     3: "Good. Brief every introducer so the first impression lands right.",
-                    4: "Excellent. A sequenced warm-intro campaign creates the momentum that closes rounds." } },
+                    4: "Excellent. A warm-intro campaign run in a deliberate order creates the momentum that closes rounds." } },
             { id: "q11", dimension: "Pitch & Story", tag: "F",
                 text: "How compelling and rehearsed is your fundraising story?",
                 options: [
@@ -663,11 +663,11 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
 
         /* Written report additions. The scoring engine, bands and gate above
            are untouched; these read the band and the ranked gaps they produce. */
-        const IR_STEPS = [["diagnostic.html","01 · Diagnostic","Funding Scorecard · done"],["roadmap.html","02 · Personalised Roadmap","Your gaps, reverse-engineered"],["finance-advisory.html","03 · Insourcing","Finance Advisory · capability, embedded"],["readiness-project.html","04 · Readiness Project","The full engagement"]];
+        const IR_STEPS = [["diagnostic.html","01 · Diagnostic","Funding Scorecard · done"],["roadmap.html","02 · Personalised Roadmap","Your gaps, reverse-engineered"],["finance-advisory.html","03 · Insourcing","Finance Advisory · skills that stay in your business"],["readiness-project.html","04 · Readiness Project","The full engagement"]];
         const IR_PLAN = {
             "Raise Ready":   { entry: 4, text: "You are Raise Ready. The suggested plan goes straight to a Readiness Project: the 90-day arc that builds the data room, strengthens the bench and takes the raise to market, with David leading investor engagement as an officer of your company. Your entry point is step 04." },
-            "Almost Ready":  { entry: 2, text: "You are Almost Ready. The suggested plan is a Personalised Roadmap that turns the gaps above into a sequenced plan, then Pitching where the story and the fundraising assets are the gap, Commercial Acceleration where the growth engine is, and Finance Advisory where the numbers are. Your entry point is step 02." },
-            "Getting Ready": { entry: 2, text: "You are Getting Ready. The suggested plan starts with the free tools on the Funding page and a Personalised Roadmap that sequences the priority gaps; where the numbers are the gap, Finance Advisory's Financial Deep Dive comes first. Your entry point is step 02." }
+            "Almost Ready":  { entry: 2, text: "You are Almost Ready. The suggested plan is a Personalised Roadmap that turns the gaps above into a plan that decides what comes first, then Pitching where the story and the fundraising assets are the gap, Commercial Acceleration where the growth engine is, and Finance Advisory where the numbers are. Your entry point is step 02." },
+            "Getting Ready": { entry: 2, text: "You are Getting Ready. The suggested plan starts with the free tools on the Funding page and a Personalised Roadmap that puts the priority gaps in order; where the numbers are the gap, Finance Advisory's Financial Deep Dive comes first. Your entry point is step 02." }
         };
         function irTarget(pct){
             const idx = BANDS.findIndex(b => pct >= b.min);
@@ -682,9 +682,9 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
                 ? `You are already ${target.band.name}. The line from here is about holding it through the raise.`
                 : `Your target is ${target.band.name}. You need ${target.points} more point${target.points === 1 ? "" : "s"} to get there.`;
             document.getElementById('ir-targetNote').textContent = levers.length
-                ? "Each step up on one question is worth about 2 points on the whole score. The gaps below, in priority order, are the levers that get you there, each with the thing we would do first."
-                : "No priority gaps were identified, so there is no single lever to pull. Keep the assets current and test the deck on real audiences before the raise.";
-            document.getElementById('ir-levers').innerHTML = levers.map((g, n) => `<div class="lever"><b>Lever ${n + 1} · ${g.dimension}</b>${g.advice}</div>`).join("");
+                ? "Each step up on one question is worth about 2 points on the whole score. The gaps below, in priority order, are the three things that move your score, each with the thing we would do first."
+                : "No priority gaps were identified, so there is no single thing to change. Keep the assets current and test the deck on real audiences before the raise.";
+            document.getElementById('ir-levers').innerHTML = levers.map((g, n) => `<div class="lever"><b>${n + 1} · ${g.dimension}</b>${g.advice}</div>`).join("");
             document.getElementById('ir-planText').textContent = plan.text;
             document.getElementById('ir-planSteps').innerHTML = IR_STEPS.map((st, i) => i + 1 === plan.entry
                 ? `<li class="here">${st[1]}<em>Your entry point</em></li>`

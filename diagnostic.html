@@ -132,7 +132,7 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
         <div class="svcmatch" id="svcMatch"></div>
         <p style="margin-top:1.2rem;" id="ctaLine"></p>
         <p style="margin-top:0.8rem;"><a id="bookBtn" href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" target="_blank" rel="noopener" style="display:inline-block;background:var(--navy);color:#fff;padding:0.75rem 1.5rem;border-radius:4px;font-weight:600;">Book your free 30-minute ATM call →</a></p>
-        <p id="deepLink" style="display:none;font-size:0.88rem;margin-top:1rem;">Scoring this well? Go a level deeper with the <a href="transaction-readiness.html">Transaction Readiness Assessment</a>: the 24-metric instrument a buyer's advisers would use.</p>
+        <p id="deepLink" style="display:none;font-size:0.88rem;margin-top:1rem;">Scoring this well? Go a level deeper with the <a href="transaction-readiness.html">Transaction Readiness Assessment</a>: the 24-metric assessment a buyer's advisers would use.</p>
       </div>
     </div>
   </section>
@@ -190,7 +190,7 @@ const THEMES = [
       "Do you actively explore acquisitions as part of your growth plan?",
       "Do you have a documented, step-by-step roadmap for achieving your growth targets?"]},
  {key:"finance", name:"Financial Clarity & Control", weight:1.5,
-  low:["Introduce financial modelling and scenario planning","Install a 13-week cashflow and KPI dashboard"],
+  low:["Introduce financial modelling and scenario planning","Install a 13-week cashflow and a dashboard of the numbers that matter"],
   qs:["Do you receive regular, insightful financial reports that you fully understand?",
       "Can you predict your cash flow position for the next 6–12 months with confidence?",
       "Do you have a financial model that allows you to test “what if?” scenarios before making big decisions?",
@@ -205,7 +205,7 @@ const THEMES = [
   qs:["Are your operations ready to handle a sudden doubling in sales without chaos?",
       "Do you have the right leadership team and structures to sustain rapid growth?",
       "Are your processes documented and repeatable, rather than dependent on key individuals?"]},
- {key:"exit", name:"Exit Planning & Value Creation", weight:1.5,
+ {key:"exit", name:"Exit Planning and Building Value", weight:1.5,
   low:["Get a professional view of your current valuation and its drivers","Align your personal exit plan with the business plan"],
   qs:["Do you know the current value of your business and what drives it up or down?",
       "Have you taken active steps to make your business “exit-ready” in the next 3–5 years?",
@@ -220,7 +220,7 @@ const MAX_WEIGHTED = THEMES.reduce((s,t)=>s + t.qs.length*5*t.weight, 0); // 125
 const BANDS = [
   {min:91, label:"Highly Ready", color:"var(--good)",
    desc:"You have clear goals, strong financial foundations and genuine readiness for exponential growth. You are well placed to fund, acquire and build towards a high-value exit.",
-   svc:"<b>Your ATM service match:</b> the full <a href='roadmap.html'>FACE Pathway</a> (Fund, Acquire, Consolidate, Exit) with hands-on strategic guidance end to end.",
+   svc:"<b>Your ATM service match:</b> the full <a href='roadmap.html'>FACE Pathway</a> (Fund, Acquire, Consolidate, Exit) with hands-on strategic guidance from start to finish.",
    cta:"You're ATM Ready. With funding, acquisitions and exit in view, let's accelerate together.", deep:true},
   {min:71, label:"Strong Potential", color:"#4D7C0F",
    desc:"Solid foundations and clear ambition, with targeted gaps that structured expert input would close quickly.",
@@ -229,7 +229,7 @@ const BANDS = [
   {min:41, label:"Emerging", color:"var(--warn)",
    desc:"Clear ambition, but gaps in financial clarity, funding readiness or exit planning are holding the multiplier back.",
    svc:"<b>Your ATM service match:</b> <b>Financial Modelling</b> to give you a decision-grade model, with <b>Insourced CFO</b> support and a <b>Funding Fitness Index</b> review.",
-   cta:"You're growth-ready. Let's sharpen your financials and strategy to unlock the next level.", deep:false},
+   cta:"You're growth-ready. Sharpen your numbers and your plan, and the next band is within reach.", deep:false},
   {min:0, label:"At Risk", color:"var(--bad)",
    desc:"The foundations need strengthening before rapid growth is safe. That is not bad news, it is the map, and every gap identified here is fixable.",
    svc:"<b>Your ATM service match:</b> start with a <b>Financial Deep Dive</b> to establish the true picture, then an <b>Insourced Finance Function</b> to build the rhythm that growth needs.",
@@ -410,10 +410,10 @@ function renderResults(){
 
 /* Written report additions. The scoring engine, bands, gate and service match
    above are untouched; these read the band and the answers they produce. */
-const MD_STEPS = [["diagnostic.html","01 · Diagnostic","Multiplier Diagnostic · done"],["roadmap.html","02 · Personalised Roadmap","Your gaps, reverse-engineered"],["finance-advisory.html","03 · Insourcing","Finance Advisory · capability, embedded"],["readiness-project.html","04 · Readiness Project","The full engagement"]];
+const MD_STEPS = [["diagnostic.html","01 · Diagnostic","Multiplier Diagnostic · done"],["roadmap.html","02 · Personalised Roadmap","Your gaps, reverse-engineered"],["finance-advisory.html","03 · Insourcing","Finance Advisory · skills that stay in your business"],["readiness-project.html","04 · Readiness Project","The full engagement"]];
 const MD_PLAN = {
   "Highly Ready":     {entry:4, text:"You are Highly Ready. The suggested plan runs the full FACE pathway with a Readiness Project: the 90-day arc from discovery and audit through value enhancement to transaction launch, with David leading buyer and investor engagement as an officer of your company. Go a level deeper first with the Transaction Readiness Assessment. Your entry point is step 04."},
-  "Strong Potential": {entry:2, text:"You have Strong Potential. The suggested plan starts with a Personalised Roadmap that turns the gaps above into a sequenced plan, then the sprints that close them: Pitching where the story is the gap, Commercial Acceleration where the growth engine is, and Finance Advisory where the numbers are. Your entry point is step 02."},
+  "Strong Potential": {entry:2, text:"You have Strong Potential. The suggested plan starts with a Personalised Roadmap that turns the gaps above into a plan that decides what comes first, then the sprints that close them: Pitching where the story is the gap, Commercial Acceleration where the growth engine is, and Finance Advisory where the numbers are. Your entry point is step 02."},
   "Emerging":         {entry:3, text:"You are Emerging. The suggested plan starts with Finance Advisory, a Financial Deep Dive to establish the true picture, then an insourced CFO and a decision-grade model, before the roadmap and the readiness work make sense. Your entry point is step 03."},
   "At Risk":          {entry:3, text:"You are At Risk, which is the map, not the verdict. The suggested plan starts with Finance Advisory: a Financial Deep Dive first, then an insourced finance function to build the rhythm growth needs. The roadmap follows once the numbers hold. Your entry point is step 03."}
 };
@@ -440,9 +440,9 @@ function renderMdReport(answers, total, band){
   document.getElementById("md-targetLine").textContent = target.already
     ? `You are already ${target.band.label}. The line from here is about holding it.`
     : `Your target is ${target.band.label}. You need ${target.points} more point${target.points === 1 ? "" : "s"} to get there.`;
-  document.getElementById("md-targetNote").textContent = "Finance, funding and exit questions carry extra weight, so a step up on one of those moves the score most. Your three lowest answers below are the levers, each with the thing we would do first.";
+  document.getElementById("md-targetNote").textContent = "Finance, funding and exit questions carry extra weight, so a step up on one of those moves the score most. Your three lowest answers below are the three things that move your score, each with the thing we would do first.";
   document.getElementById("md-levers").innerHTML = levers.map((l, n) =>
-    `<div class="lever"><b>Lever ${n+1} · Q${l.i+1} · ${l.theme} · you answered ${l.a}/5</b>${allQs[l.i]}<br><span style="color:var(--navy);font-weight:600;">What we would do:</span> ${l.action}.</div>`).join("");
+    `<div class="lever"><b>${n+1} · Q${l.i+1} · ${l.theme} · you answered ${l.a}/5</b>${allQs[l.i]}<br><span style="color:var(--navy);font-weight:600;">What we would do:</span> ${l.action}.</div>`).join("");
   document.getElementById("md-planText").textContent = plan.text;
   document.getElementById("md-planSteps").innerHTML = MD_STEPS.map((st, i) => i + 1 === plan.entry
     ? `<li class="here">${st[1]}<em>Your entry point</em></li>`

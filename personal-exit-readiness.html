@@ -151,9 +151,9 @@ a.jump:hover{background:#A61D17;color:#fff;}
 </ul>
 
 <h2>Where it fits</h2>
-<p class="body">This is the E of FACE from the founder's side. The <a href="diagnostic.html">Multiplier Diagnostic</a> scores the business; the <a href="transaction-readiness.html">Transaction Readiness Assessment</a> tests it at a buyer's depth; this instrument scores the person the buyer will be negotiating with. The three together are what the Readiness Call reads before the first conversation about targets.</p>
+<p class="body">This is the E of FACE from the founder's side. The <a href="diagnostic.html">Multiplier Diagnostic</a> scores the business; the <a href="transaction-readiness.html">Transaction Readiness Assessment</a> tests it at a buyer's depth; this assessment scores the person the buyer will be negotiating with. The three together are what the Readiness Call reads before the first conversation about targets.</p>
 <div class="stream">
-<span class="kicker">The value stream this feeds</span>
+<span class="kicker">The four steps this feeds</span>
 <ol class="stream-steps">
   <li><a href="diagnostic.html">01 · Diagnostic<em>Free · the business, and now the founder</em></a></li>
   <li><a href="roadmap.html">02 · Personalised Roadmap<em>From your goals, backwards</em></a></li>
@@ -326,7 +326,7 @@ function scoreAssessment(){
 /* ---- Written report: per-statement breakdown, line to target, plan ------ */
 const ACTIONS = ["Work out the number properly: what you need after tax, for how long, with an independent planner if the sums are not obvious. A guessed number is the most common reason a good offer gets refused, or a bad one accepted.", "Write one page on the year after completion: where you are, what you do on a Tuesday, what you have stopped doing. If the page is empty, that is the work.", "Have the conversation with co-owners and family before there is an offer on the table, with the timing and the number in it. Agreement found early is cheap.", "Separate your personal finances from the business: a plan that survives the salary stopping, the dividends stopping and the guarantees being released.", "Describe the business three years out without you, in writing. If you cannot, the buyer will write it for you, in the earn-out.", "Write down the deal you would walk away from: the price floor, the structure you will not accept, the protections for your people. Decide it now, calmly, not across a table.", "Write the business case down so a stranger could follow it. Founder clarity and business clarity are the same document read from two sides.", "Get a rolling twelve-month forecast in place that someone other than you owns; the number you need and the number the business can deliver have to meet."];
 const PLAN = {"programme": [2, "Founder Clarity, then the Roadmap", "Founder Clarity is the first phase of ATM's exit advisory process: the number, the life after it, the people who need to agree, the deal you would refuse. It is settled on the Readiness Call and in the first weeks of the Personalised Roadmap, which starts from your personal and financial goals and works back to what the business must become. Your entry point is the Roadmap. Scope and fee are agreed on the Readiness Call."], "finance": [3, "Finance Advisory", "Finance Advisory starts with a Financial Deep Dive to establish the true position, then an insourced CFO or finance function on a 90-day sprint, so that the number the business can deliver is real before the personal plan is built on it. Your entry point is Insourcing. Scope and fee are agreed on the Readiness Call."], "call": [1, "The Multiplier Diagnostic, then Transaction Readiness", "Your next step is the Multiplier Diagnostic, free, to read the whole business, and then the Transaction Readiness Assessment at a buyer's depth. Book the Readiness Call and we will read all three together. Scope and fee for anything beyond the diagnostics are agreed on the call."]};
-const STEPS = [["diagnostic.html","01 · Diagnostic","Free · the Funding Scorecard or Exit Ready"],["roadmap.html","02 · Personalised Roadmap","Your gaps, reverse-engineered"],["finance-advisory.html","03 · Insourcing","Finance Advisory · capability, embedded"],["readiness-project.html","04 · Readiness Project","The full engagement"]];
+const STEPS = [["diagnostic.html","01 · Diagnostic","Free · the Funding Scorecard or Exit Ready"],["roadmap.html","02 · Personalised Roadmap","Your gaps, reverse-engineered"],["finance-advisory.html","03 · Insourcing","Finance Advisory · skills that stay in your business"],["readiness-project.html","04 · Readiness Project","The full engagement"]];
 let lastReport = null;
 function weakest(answers){
   return answers.map((a, i) => ({a: Number(a), i: i})).sort((x, y) => (x.a - y.a) || (x.i - y.i)).slice(0, 3).map(x => x.i);
@@ -343,7 +343,7 @@ function buildSummary(r){
   lines.push("Add Then Multiply · " + STREAM_NAME + " self-assessment");
   lines.push("Score: " + r.scores.total + "%, " + r.band.name);
   lines.push(r.target.already ? "Target: " + r.target.band.name + ". You are there; the job is to hold it." : "Target: " + r.target.band.name + ", " + r.target.points + " points to go.");
-  lines.push("Your three levers:");
+  lines.push("The three things that move your score:");
   r.levers.forEach((i, n) => lines.push((n + 1) + ". " + STATEMENTS[i].text + " (you scored " + r.answers[i] + "/5): " + ACTIONS[i]));
   lines.push("Next step: " + r.plan.name + ". Scope and fee are agreed on the Readiness Call.");
   return lines.join("\n");
@@ -378,8 +378,8 @@ function renderReport(s, answers){
     : `Your target is ${target.band.name}. You need ${target.points} more point${target.points === 1 ? "" : "s"} to get there.`;
   document.getElementById("targetNote").textContent = target.already
     ? "Even at Strong, the three statements below are the ones most likely to slip. Each comes with the thing we would do first to keep it."
-    : `Each step up the scale on one statement is worth 2.5 points on the whole score, so the three weakest statements below are the levers that close the gap. Each comes with the thing we would do first.`;
-  document.getElementById("levers").innerHTML = levers.map((i, n) => `<div class="lever"><b>Lever ${n + 1} · statement ${i + 1} · you scored ${answers[i]}/5</b>${STATEMENTS[i].text}<br><span style="color:var(--navy);font-weight:600;">What we would do:</span> ${ACTIONS[i]}</div>`).join("");
+    : `Each step up the scale on one statement is worth 2.5 points on the whole score, so the three weakest statements below are the three things that move your score. Each comes with the thing we would do first.`;
+  document.getElementById("levers").innerHTML = levers.map((i, n) => `<div class="lever"><b>${n + 1} · statement ${i + 1} · you scored ${answers[i]}/5</b>${STATEMENTS[i].text}<br><span style="color:var(--navy);font-weight:600;">What we would do:</span> ${ACTIONS[i]}</div>`).join("");
   document.getElementById("route").innerHTML = `<h3>${route.title}</h3><p>${route.text}</p><p class="links">${route.links.map(l => `<a href="${l[0]}">${l[1]} →</a>`).join(" &nbsp;·&nbsp; ")}</p>`;
   document.getElementById("planSteps").innerHTML = STEPS.map((st, i) => i + 1 === plan.entry
     ? `<li class="here">${st[1]}<em>Your entry point</em></li>`

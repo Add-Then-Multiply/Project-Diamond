@@ -74,10 +74,10 @@ FOUNDER_DEPENDENCE = {
 </div>
 
 <h2>The problem</h2>
-<p class="body">Dependence is invisible from the inside because the founder fills the gaps without noticing. From the outside it is the first thing a buyer's advisers look for: which customers would follow you out, which processes exist only in your memory, who would run the business in the first hundred days, and whether the revenue was won by a system or by a person. The answers set the earn-out, the lock-in and the discount. Reducing dependence is the largest value lever most founders have, and the one that takes longest, which is why it belongs in the Consolidate phase, well before a sale is in view.</p>
+<p class="body">Dependence is invisible from the inside because the founder fills the gaps without noticing. From the outside it is the first thing a buyer's advisers look for: which customers would follow you out, which processes exist only in your memory, who would run the business in the first hundred days, and whether the revenue was won by a system or by a person. The answers set the earn-out, the lock-in and the discount. Reducing dependence adds more value than anything else most founders can do, and it takes longest, which is why it belongs in the Consolidate phase, well before a sale is in view.</p>
 
 <h2>What we do</h2>
-<p class="body">Founder Dependence is not a service of its own. It is the diagnosis that points to the right one. Where the dependence is commercial, <a href="commercial-acceleration.html">Commercial Acceleration</a> builds the sales pathway and the people who run it. Where it is financial and operational, <a href="finance-advisory.html">Finance Advisory</a> puts a finance function and a management rhythm in place that does not need you in every meeting. Where it is about succession and the story, the <a href="roadmap.html">Personalised Roadmap</a> sequences the work so that a buyer meets a business, not a person.</p>
+<p class="body">Founder Dependence is not a service of its own. It is the diagnosis that points to the right one. Where the dependence is commercial, <a href="commercial-acceleration.html">Commercial Acceleration</a> builds the sales pathway and the people who run it. Where it is financial and operational, <a href="finance-advisory.html">Finance Advisory</a> puts a finance function and a management rhythm in place that does not need you in every meeting. Where it is about succession and the story, the <a href="roadmap.html">Personalised Roadmap</a> puts the work in order so that a buyer meets a business, not a person.</p>
 <p class="body">""" + BOUNDARY.format(verb="build a business that runs without you") + """</p>
 
 <h2>What you walk away with</h2>
@@ -88,19 +88,19 @@ FOUNDER_DEPENDENCE = {
 </ul>
 
 <h2>Where it fits</h2>
-<p class="body">Founder Dependence sits in Consolidate, the C of FACE, because it is the work of making the business a machine rather than a performance. It feeds <a href="diagnostic.html">Exit</a> directly: the Multiplier Diagnostic scores the whole business, and the Transaction Readiness Assessment tests it at a buyer's depth; this instrument scores the one thing both of them assume, that the business is separable from you.</p>
+<p class="body">Founder Dependence sits in Consolidate, the C of FACE, because it is the work of making the business a machine rather than a performance. It feeds <a href="diagnostic.html">Exit</a> directly: the Multiplier Diagnostic scores the whole business, and the Transaction Readiness Assessment tests it at a buyer's depth; this assessment scores the one thing both of them assume, that the business is separable from you.</p>
 <div class="stream">
-<span class="kicker">The value stream this feeds</span>
+<span class="kicker">The four steps this feeds</span>
 <ol class="stream-steps">
   <li><a href="diagnostic.html">01 · Diagnostic<em>Free · the whole business</em></a></li>
-  <li><a href="roadmap.html">02 · Personalised Roadmap<em>Dependence, sequenced out</em></a></li>
+  <li><a href="roadmap.html">02 · Personalised Roadmap<em>Dependence, removed in order</em></a></li>
   <li><a href="finance-advisory.html">03 · Insourcing<em>Finance Advisory and Commercial Acceleration</em></a></li>
   <li><a href="readiness-project.html">04 · Readiness Project<em>A business, not a person, goes to market</em></a></li>
 </ol>
 </div>
 
 <h2>Proof</h2>
-<p class="body">"How small businesses can think like big businesses" is the whole of it: big businesses are built to outlast the people who run them. The discipline behind this instrument is the Consolidate phase of the FACE methodology in David B Horne's <em>Add Then Multiply</em>, and the buyer's lens on founder risk that every transaction he has led has had to answer.</p>
+<p class="body">"How small businesses can think like big businesses" is the whole of it: big businesses are built to outlast the people who run them. The discipline behind this assessment is the Consolidate phase of the FACE methodology in David B Horne's <em>Add Then Multiply</em>, and the buyer's lens on founder risk that every transaction he has led has had to answer.</p>
 <p class="quote">"How small businesses can think like big businesses and achieve exponential growth." <em>Add Then Multiply</em>, David B Horne</p>
 
 """,
@@ -120,7 +120,7 @@ FOUNDER_DEPENDENCE = {
   "Write the operating manual for the three things only you know how to do, then watch someone else do them from the manual.",
   "Set decision limits in writing: what a manager may decide on price, hiring and spend without you, and review the exceptions monthly rather than the decisions daily.",
   "Move revenue onto renewal, retainer or repeat where the customer will accept it, and track the share of revenue that arrives without a new sale by you.",
-  "Name your successor, tell them, and give them one part of the business to run end to end for a quarter.",
+  "Name your successor, tell them, and give them one part of the business to run from start to finish for a quarter.",
   "Write the business case down so a stranger could follow it. A business that depends on you usually has its case in your head too.",
   "Get a rolling twelve-month forecast in place that someone other than you owns. Finance Advisory's Financial Deep Dive is where that starts.",
  ],
@@ -136,7 +136,7 @@ FOUNDER_DEPENDENCE = {
    "links": [["investor-ready.html", "Funding Scorecard"], ["diagnostic.html", "Exit Ready"]]},
  },
  "plan": {
-  "programme": [3, "Commercial Acceleration and Finance Advisory", "Reducing founder dependence runs through Insourcing: Commercial Acceleration for the selling and the sales pathway, Finance Advisory for the numbers and the management rhythm, each a 90-day sprint with the capability left in the business. Your entry point is Insourcing. Scope and fee are agreed on the Readiness Call."],
+  "programme": [3, "Commercial Acceleration and Finance Advisory", "Reducing founder dependence runs through Insourcing: Commercial Acceleration for the selling and the sales pathway, Finance Advisory for the numbers and the management rhythm, each a 90-day sprint with the skills left in the business. Your entry point is Insourcing. Scope and fee are agreed on the Readiness Call."],
   "finance": [3, "Finance Advisory", "Finance Advisory starts with a Financial Deep Dive to establish the true position, then an insourced CFO or finance function on a 90-day sprint. Your entry point is Insourcing; the dependence work follows once the numbers stand on their own. Scope and fee are agreed on the Readiness Call."],
   "call": [1, "Funding Scorecard or Exit Ready", "Your next step is one of the two free diagnostics: the Funding Scorecard if you are raising, Exit Ready if you are selling, followed by the Personalised Roadmap. Book the Readiness Call and we will tell you which. Scope and fee for anything beyond the diagnostic are agreed on the call."],
  },
@@ -173,9 +173,9 @@ PERSONAL_EXIT = {
 </ul>
 
 <h2>Where it fits</h2>
-<p class="body">This is the E of FACE from the founder's side. The <a href="diagnostic.html">Multiplier Diagnostic</a> scores the business; the <a href="transaction-readiness.html">Transaction Readiness Assessment</a> tests it at a buyer's depth; this instrument scores the person the buyer will be negotiating with. The three together are what the Readiness Call reads before the first conversation about targets.</p>
+<p class="body">This is the E of FACE from the founder's side. The <a href="diagnostic.html">Multiplier Diagnostic</a> scores the business; the <a href="transaction-readiness.html">Transaction Readiness Assessment</a> tests it at a buyer's depth; this assessment scores the person the buyer will be negotiating with. The three together are what the Readiness Call reads before the first conversation about targets.</p>
 <div class="stream">
-<span class="kicker">The value stream this feeds</span>
+<span class="kicker">The four steps this feeds</span>
 <ol class="stream-steps">
   <li><a href="diagnostic.html">01 · Diagnostic<em>Free · the business, and now the founder</em></a></li>
   <li><a href="roadmap.html">02 · Personalised Roadmap<em>From your goals, backwards</em></a></li>
