@@ -76,8 +76,8 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
   <h2>1 · Your fundraising assets checklist</h2>
   <div class="card check" id="checklist">
     <p style="font-size:0.88rem;color:var(--slate);margin-bottom:0.6rem;">Before approaching any investor, these assets should be ready in a secure data room. Tick what you have today.</p>
-    <div class="progress" id="pwrap" role="progressbar" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0" aria-valuetext="0 of 9 fundraising assets ready (0%)" aria-label="Fundraising assets ready"><i id="pbar" style="width:0%"></i></div>
-    <p id="ptext" style="font-size:0.8rem;color:var(--slate);margin-bottom:0.8rem;">0 of 9 ready</p>
+    <div class="progress" id="pwrap" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" aria-valuetext="0 of 10 fundraising assets ready (0%)" aria-label="Fundraising assets ready"><i id="pbar" style="width:0%"></i></div>
+    <p id="ptext" style="font-size:0.8rem;color:var(--slate);margin-bottom:0.8rem;">0 of 10 ready</p>
   </div>
 
   <p style="font-size:0.88rem;margin:0.6rem 0 0;">Want a scored assessment? Take the <a href="investor-ready.html"><b>Funding Scorecard</b></a>: seven dimensions investors test, evaluated in minutes.</p>
@@ -146,6 +146,7 @@ document.querySelectorAll("a.book-cta, a.book-link").forEach(a => { setBooking(a
 const ASSETS = [
  "Pitch deck: 12 slides: cover, elevator pitch, team, problem, solution, traction, market (TAM/SAM/SOM), competition, financials, ask & exit, use of funds, contact",
  "Five-year financial projections, income statement, balance sheet and cash flow, month by month, with assumptions stated",
+ "Full business plan: 30–50 pages expanding everything in the deck and the model",
  "Historical financial statements (if trading), professionally prepared",
  "Secure data room set up (even a well-structured secure drive) for due diligence",
  "Cap table: current, accurate, with all options and convertibles recorded",
@@ -206,8 +207,8 @@ function runTests(){
   const outSnap = { lang: document.getElementById("langOut").innerHTML };
   const results = [];
   const t=(n,c)=>results.push({name:n,pass:!!c});
-  t("9 checklist assets", ASSETS.length===9);
-  t("checklist rendered", cl.querySelectorAll("input[type=checkbox]").length===9);
+  t("10 checklist assets", ASSETS.length===10);
+  t("checklist rendered", cl.querySelectorAll("input[type=checkbox]").length===10);
   t("prevention rules present", PREVENTION.length>=5);
   document.getElementById("pitchIn").value = "We hope to avoid losing money and protect our customers. A safe bet.";
   checkLanguage();
@@ -216,7 +217,7 @@ function runTests(){
   checkLanguage();
   t("promotion text passes", document.getElementById("langOut").innerHTML.includes("Strong promotion focus"));
   t("no grant builder on the page", !document.getElementById("grantForm") && typeof window.buildDraft === "undefined");
-  t("no full business plan in the checklist", ASSETS.every(a=>!/business plan/i.test(a)));
+  t("the full business plan is on the checklist", ASSETS.some(a=>/business plan/i.test(a)));
   t("VC horizon reads 5 to 7 years", /5–7 years/.test(document.querySelector("table").textContent));
   t("BOOKING_URL set", typeof BOOKING_URL==="string" && BOOKING_URL.length>0);
   t("booking CTA wired", document.querySelectorAll("a.book-cta").length>=1 && [...document.querySelectorAll("a.book-cta, a.book-link")].every(a=>a.getAttribute("href").indexOf(BOOKING_URL+"?")===0));

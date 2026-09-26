@@ -18,7 +18,9 @@ def page(cfg):
     s = BASE
     s = re.sub(r"<title>.*?</title>", "<title>" + cfg["title"] + "</title>", s, count=1)
     s = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="' + cfg["description"] + '">', s, count=1)
-    start = s.index('<span class="kicker">'); end = s.index('<h2 id="assess">')
+    # The base page's opening kicker carries the "rise" class; start there, so none of the
+    # Pitching introduction survives above the new instrument's own copy.
+    start = s.index('<span class="kicker rise">'); end = s.index('<h2 id="assess">')
     s = s[:start] + cfg["copy"] + s[end:]
     for old, new in [
         ('<h2 id="assess">Pitching self-assessment', '<h2 id="assess">' + cfg["stream"] + ' self-assessment'),
@@ -46,6 +48,7 @@ def page(cfg):
     s = re.sub(r'  t\("call route links to both free diagnostics", [^\n]*\n', '  t("call route links to at least two pages, one of them a diagnostic", ROUTES.call.links.length >= 2 && ROUTES.call.links.every(l => /\\.html$/.test(l[0])) && ROUTES.call.links.some(l => /diagnostic|investor-ready|transaction-readiness/.test(l[0])));\n', s, count=1)
     s = re.sub(r'  t\("plan for the call route names the two diagnostics at step 01", [^\n]*\n', '  t("plan for the call route sits at step 01 and names a diagnostic", /Diagnostic|Scorecard|Exit Ready|Transaction Readiness/.test(planFor("call").name) && planFor("call").entry === 1);\n', s, count=1)
     s = re.sub(r'  t\("programme and finance plans use the 90-day sprint framing", [^\n]*\n', '  t("the finance plan uses the 90-day sprint framing", /90-day/.test(PLAN.finance[2]));\n', s, count=1)
+    assert "A story that agrees with the numbers" not in s[:s.index('<h2 id="assess">')], (cfg["file"], "Pitching intro left in")
     for bad in ["Key Person", "Priestley", "Dent", "product.html", "publish.html", "—"]:
         assert bad not in s, (cfg["file"], bad)
     (ROOT / cfg["file"]).write_text(s, encoding="utf-8")
@@ -79,7 +82,7 @@ FOUNDER_DEPENDENCE = {
 
 <h2>What you walk away with</h2>
 <ul class="walk">
-<li><b>A dependence map.</b> Six dimensions scored, the two that matter most named, and the order to tackle them in.</li>
+<li><b>A dependence map.</b> Eight statements scored, the two that matter most named, and the order to tackle them in.</li>
 <li><b>The line to your target.</b> How far you are from a business that could be sold as a business, and what closes the gap.</li>
 <li><b>A suggested plan.</b> Which service removes which dependence, and where to start.</li>
 </ul>
@@ -164,7 +167,7 @@ PERSONAL_EXIT = {
 
 <h2>What you walk away with</h2>
 <ul class="walk">
-<li><b>Your own readiness, scored.</b> Six dimensions of personal readiness, separate from the business, and the two to settle first.</li>
+<li><b>Your own readiness, scored.</b> Eight statements on your personal readiness, separate from the business, and the two to settle first.</li>
 <li><b>The line to your target.</b> What still needs an answer before you could say yes, or no, to an offer with confidence.</li>
 <li><b>A suggested plan.</b> Founder Clarity first, then the diagnostic and the roadmap, in the order that protects the price.</li>
 </ul>

@@ -79,20 +79,21 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
   </nav>
 </header>
 <main>
-  <span class="kicker rise">Ethical Acquisitions Scorecard · 20 questions · 3 minutes · instant results</span>
+  <span class="kicker rise">Ethical Acquisitions Scorecard · 15 questions · 3 minutes · instant results</span>
   <h1 class="rise d1">Buy or sell a business the right way</h1>
   <p class="lede rise d2">Whether you are preparing to sell the business you built, or acquiring to grow, the difference between a fair deal and a painful one is readiness, financial, structural and ethical. This scorecard measures all three, and shows you where you stand before you sit down at the table.</p>
 
-  <div class="themehead"><h2>First, which best describes you today?</h2><p>This personalises your results. It is not scored.</p></div>
+  <div class="themehead"><h2>First, which best describes you today?</h2><p>This sets the questions you see, so you only answer the ones that apply to you. It is not scored.</p></div>
   <div class="rolegrid">
     <label><input type="radio" name="q0" value="seller"><b>Seller / owner</b>preparing to exit</label>
     <label><input type="radio" name="q0" value="buyer"><b>Buyer / acquirer</b>growing by acquisition</label>
     <label><input type="radio" name="q0" value="advisor"><b>Advisor</b>exploring options for a client</label>
   </div>
 
-  <form id="diag"></form>
+  <p id="role-prompt" style="font-size:0.9rem;color:var(--slate);margin:1rem 0;">Choose one of the three above and your questions will appear here.</p>
+  <form id="diag" style="display:none;"></form>
   <p id="diag-err" class="inline-err" role="alert" style="display:none;"></p>
-  <button class="cta" onclick="scoreDiagnostic()">Calculate my Readiness Score</button>
+  <button class="cta" id="scoreBtn" style="display:none;" onclick="scoreDiagnostic()">Calculate my Readiness Score</button>
 
   <section id="results" aria-live="polite">
     <span class="kicker">Your results</span>
@@ -198,7 +199,13 @@ const THEMES = [
       "Are you prepared for integration challenges after an acquisition, including operations, teams, and culture?",
       "Are you confident in your ability to create long term value from a transaction, rather than only short term gains?"]},
 ];
-const MAX_WEIGHTED = THEMES.reduce((s,t)=>s + t.qs.length*5*t.weight, 0); // 125
+const MAX_WEIGHTED = THEMES.reduce((s,t)=>s + t.qs.length*5*t.weight, 0); // 125, all four sections
+/* Which sections each role answers. A seller is not asked the buyer questions and
+   a buyer is not asked the seller questions; an adviser may act for either side,
+   so sees both. The score is taken over the sections shown, never the hidden ones. */
+const ROLE_THEMES = { seller:["seller","ethics","finance"], buyer:["buyer","ethics","finance"], advisor:["seller","buyer","ethics","finance"] };
+function themesFor(role){ const keys = ROLE_THEMES[role] || ROLE_THEMES.advisor; return THEMES.filter(t=>keys.includes(t.key)); }
+function maxFor(role){ return themesFor(role).reduce((s,t)=>s + t.qs.length*5*t.weight, 0); }
 const BANDS = [
   {min:91, label:"Highly Ready", color:"var(--good)",
    desc:"Clear goals, ethical alignment, and strong financial and strategic readiness. You are well placed to achieve a successful, fair, and sustainable transaction.",
@@ -226,29 +233,48 @@ function roleCta(role, total){
 const form = document.getElementById("diag");
 let html = ""; let qn = 0;
 THEMES.forEach(t => {
-  html += `<div class="themehead"><h2>${t.name}</h2><p>${t.qs.length} questions${t.weight>1 ? " · weighted ×"+t.weight : ""}</p></div>`;
+  html += `<div class="theme" data-theme="${t.key}"><div class="themehead"><h2>${t.name}</h2><p>${t.qs.length} questions${t.weight>1 ? " · weighted ×"+t.weight : ""}</p></div>`;
   t.qs.forEach(q => {
-    html += `<fieldset class="metric" id="metric-s${qn}"><legend><h3>${qn+1}. ${q}</h3></legend><div class="scale">`;
+    html += `<fieldset class="metric" id="metric-s${qn}"><legend><h3><span class="qnum">${qn+1}</span>. ${q}</h3></legend><div class="scale">`;
     SCALE.forEach((s,j) => {
       html += `<label><input type="radio" name="s${qn}" value="${j+1}"><b>${j+1}</b>${s}</label>`;
     });
     html += `</div></fieldset>`;
     qn++;
   });
+  html += `</div>`;
 });
 form.innerHTML = html;
+/* Show only the sections for the chosen role, and number the visible questions 1, 2, 3. */
+function applyRole(role){
+  const keys = themesFor(role).map(t=>t.key);
+  let n = 0;
+  form.querySelectorAll(".theme").forEach(el=>{
+    const on = keys.includes(el.dataset.theme);
+    el.style.display = on ? "" : "none";
+    if(on) el.querySelectorAll(".qnum").forEach(q=>{ q.textContent = ++n; });
+  });
+  form.style.display = "";
+  document.getElementById("scoreBtn").style.display = "";
+  const pr = document.getElementById("role-prompt"); if(pr) pr.style.display = "none";
+  document.getElementById("diag-err").style.display = "none";
+  return n;
+}
+document.querySelectorAll('input[name="q0"]').forEach(r=>r.addEventListener("change", ()=>applyRole(r.value)));
 setBooking(document.getElementById("bookBtn"), null);
 
-function computeScores(answers){
+/* answers holds all twenty positions; questions in sections the role does not see are null. */
+function computeScores(answers, role){
   let i = 0, weighted = 0;
-  const themeScores = {};
+  const themeScores = {}, keys = themesFor(role).map(t=>t.key);
   THEMES.forEach(t => {
     let sum = 0;
-    t.qs.forEach(()=>{ sum += answers[i]; i++; });
+    t.qs.forEach(()=>{ sum += answers[i] || 0; i++; });
+    if(!keys.includes(t.key)) return;
     themeScores[t.key] = Math.round((sum/(t.qs.length*5))*100);
     weighted += sum * t.weight;
   });
-  const total = Math.round((weighted/MAX_WEIGHTED)*100);
+  const total = Math.round((weighted/maxFor(role))*100);
   return {themeScores, total};
 }
 function bandFor(score){ return BANDS.find(b=>score>=b.min); }
@@ -286,16 +312,21 @@ function scoreDiagnostic(){
   const fail = (text, el)=>{ err.textContent = text; err.style.display = "block";
     if(el) el.scrollIntoView({behavior:"smooth", block:"center"}); };
   if(!roleSel){ fail("Please tell us which best describes you today, it is the first question.", null); window.scrollTo({top:0,behavior:"smooth"}); return; }
+  const role = roleSel.value, keys = themesFor(role).map(t=>t.key);
   const answers = [];
-  const allQs = THEMES.flatMap(t=>t.qs);
-  for(let i=0;i<allQs.length;i++){
-    const sel = document.querySelector(`input[name="s${i}"]:checked`);
-    if(!sel){ fail(`Please answer question ${i+1} before calculating your score.`, document.getElementById("metric-s"+i)); return; }
-    answers.push(parseInt(sel.value,10));
+  let i = 0;
+  for(const t of THEMES){
+    for(let k=0;k<t.qs.length;k++,i++){
+      if(!keys.includes(t.key)){ answers.push(null); continue; }
+      const sel = document.querySelector(`input[name="s${i}"]:checked`);
+      const box = document.getElementById("metric-s"+i);
+      if(!sel){ fail(`Please answer question ${box.querySelector(".qnum").textContent} before calculating your score.`, box); return; }
+      answers.push(parseInt(sel.value,10));
+    }
   }
   err.style.display = "none";
-  const {themeScores, total} = computeScores(answers);
-  pending = {answers, themeScores, total, band: bandFor(total), role: roleSel.value};
+  const {themeScores, total} = computeScores(answers, role);
+  pending = {answers, themeScores, total, band: bandFor(total), role};
   // The full report is free. The opt-in below it sends a copy and books the call.
   renderResults();
   offerReport();
@@ -365,13 +396,14 @@ function renderResults(){
   renderTeaser();
   // Carry the result context into the booking hand-off (code EA, agreed by David 20 September).
   setBooking(document.getElementById("bookBtn"), { assessment: "EA", score: total, band: band.label });
-  document.getElementById("themeBars").innerHTML = THEMES.map(t=>{
+  document.getElementById("themeBars").innerHTML = themesFor(role).map(t=>{
     const s = themeScores[t.key];
     return `<div style="font-size:0.85rem;color:var(--navy);font-weight:600;">${t.name}: ${s}%</div><div class="bar"><i style="width:${s}%;background:${barColor(s)}"></i></div><p class="tinsight">${insightFor(t,s)}</p>`;
   }).join("");
-  const ranked = answers.map((a,i)=>({a,i})).sort((x,y)=>x.a-y.a).slice(0,3);
+  const num = i => { const q = document.querySelector("#metric-s"+i+" .qnum"); return q ? q.textContent : i+1; };
+  const ranked = answers.map((a,i)=>({a,i})).filter(r=>r.a!==null).sort((x,y)=>x.a-y.a).slice(0,3);
   document.getElementById("gapList").innerHTML = ranked.map(r=>
-    `<li><b>Q${r.i+1}:</b> ${allQs[r.i]} <span style="color:var(--slate)">(you answered ${r.a}/5, ${SCALE[r.a-1]})</span></li>`).join("");
+    `<li><b>Q${num(r.i)}:</b> ${allQs[r.i]} <span style="color:var(--slate)">(you answered ${r.a}/5, ${SCALE[r.a-1]})</span></li>`).join("");
   const cfg = routing ? routing.find(r=>r.band_slug === bandSlug(band.label)) : null;
   let svcHtml = cfg ? `<b>Your ATM service match:</b> ${cfg.service}` : band.svc;
   svcHtml += `<br><span style="font-size:0.8rem;color:var(--slate);">This is an automated suggestion from your answers; an adviser confirms the next step on the Readiness Call.</span>`;
@@ -395,12 +427,28 @@ function runTests(){
   t("theme sizes 5/5/5/5", THEMES.map(th=>th.qs.length).join(",") === "5,5,5,5");
   t("weighted max is 125", MAX_WEIGHTED === 125);
   t("ethics/finance weighted 1.5", THEMES.filter(th=>th.weight===1.5).map(th=>th.key).join(",") === "ethics,finance");
-  t("all 1s -> 20%", computeScores(new Array(20).fill(1)).total === 20);
-  t("all 3s -> 60%", computeScores(new Array(20).fill(3)).total === 60);
-  t("all 5s -> 100%", computeScores(new Array(20).fill(5)).total === 100);
+  t("all 1s -> 20%", computeScores(new Array(20).fill(1), "advisor").total === 20);
+  t("all 3s -> 60%", computeScores(new Array(20).fill(3), "advisor").total === 60);
+  t("all 5s -> 100%", computeScores(new Array(20).fill(5), "advisor").total === 100);
+  // Role-based sections: sellers and buyers answer 15 questions, advisers 20
+  t("seller sees seller, ethics, finance", themesFor("seller").map(x=>x.key).join(",")==="seller,ethics,finance");
+  t("buyer sees buyer, ethics, finance", themesFor("buyer").map(x=>x.key).join(",")==="buyer,ethics,finance");
+  t("adviser sees all four sections", themesFor("advisor").length===4);
+  t("seller and buyer maximum is 100 weighted points", maxFor("seller")===100 && maxFor("buyer")===100);
+  const sellerAll5 = new Array(20).fill(5).map((v,i)=> (i>=5 && i<10) ? null : 5);
+  t("a seller with all 5s and no buyer answers scores 100%", computeScores(sellerAll5, "seller").total === 100);
+  t("a seller's report has no buyer theme", computeScores(sellerAll5, "seller").themeScores.buyer === undefined);
+  const buyerAll3 = new Array(20).fill(3).map((v,i)=> i<5 ? null : 3);
+  t("a buyer with all 3s and no seller answers scores 60%", computeScores(buyerAll3, "buyer").total === 60);
+  const chosen = document.querySelector('input[name="q0"]:checked');
+  t("choosing a role shows 15 or 20 questions", applyRole("seller")===15 && applyRole("buyer")===15 && applyRole("advisor")===20);
+  t("a seller never sees the buyer section", (applyRole("seller"), form.querySelector('[data-theme="buyer"]').style.display==="none" && form.querySelector('[data-theme="seller"]').style.display===""));
+  // put the page back as the visitor left it
+  if(chosen) applyRole(chosen.value);
+  else { form.style.display = "none"; document.getElementById("scoreBtn").style.display = "none"; document.getElementById("role-prompt").style.display = ""; }
   // ethics theme (Q11-15, idx 10-14) all 5s, rest 1s => 25 - 7.5 + 37.5 = 55 => 44%
   const ethMax = new Array(20).fill(1).map((v,i)=> (i>=10 && i<15) ? 5 : 1);
-  t("ethics-only max -> 44%", computeScores(ethMax).total === 44);
+  t("ethics-only max -> 44%", computeScores(ethMax, "advisor").total === 44);
   t("band 100 = Highly Ready", bandFor(100).label==="Highly Ready");
   t("band 91 = Highly Ready", bandFor(91).label==="Highly Ready");
   t("band 90 = Strong Potential", bandFor(90).label==="Strong Potential");
