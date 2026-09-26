@@ -46,7 +46,7 @@ for page, active in ACTIVE.items():
         links.append(indent + '<a href="' + href + '"' + cls + '>' + label + '</a>')
     links.append(f'{indent}<a href="{BOOK}" class="nav-cta" target="_blank" rel="noopener">Book a call</a>')
     s = s[:m.start(2)] + "\n" + "\n".join(links) + "\n" + close_indent + s[m.end(2):]
-    base = "Fractional finance and M&amp;A advisory for ambitious founder-led businesses"
+    base = "Fractional finance leadership for ambitious founder-led businesses"
     foot = s.split("<footer>")[1].split("</footer>")[0]
     links_txt = FOOT_LINKS_ENT if "&middot;" in foot else FOOT_LINKS
     s, n = re.subn(r"(<footer>.*?" + re.escape(base) + r")(.*?)(</footer>)", lambda mm: mm.group(1) + links_txt + mm.group(3), s, count=1, flags=re.S)

@@ -51,8 +51,8 @@ def page(cfg):
     (ROOT / cfg["file"]).write_text(s, encoding="utf-8")
     print("generated", cfg["file"], "code", cfg["code"])
 
-BOUNDARY = "One line we do not cross: Add Then Multiply does not arrange investments or publish financial promotions. We help you {verb}; introductions to investors and buyers happen only offline, through our specialist transaction partner."
-NOTE = "This page describes advisory services and is not a financial promotion. Add Then Multiply does not arrange investments; investor and buyer introductions are conducted only through a specialist transaction partner. Methodology: FACE (Fund, Acquire, Consolidate, Exit) from <em>Add Then Multiply</em> by David B Horne."
+BOUNDARY = "One line we do not cross: Add Then Multiply does not arrange investments or publish financial promotions. We help you {verb}; where a client raises money or sells, David leads that work as an officer of the client company, for and on behalf of that company."
+NOTE = "This page describes advisory services and is not a financial promotion. Add Then Multiply is not authorised or regulated by the Financial Conduct Authority and does not arrange investments. Where a client raises money, buys or sells a business, David leads that work as an officer of the client company, for and on behalf of that company. Methodology: FACE (Fund, Acquire, Consolidate, Exit) from <em>Add Then Multiply</em> by David B Horne."
 
 FOUNDER_DEPENDENCE = {
  "file": "founder-dependence.html", "code": "FD", "stream": "Founder Dependence", "noun": "how far the business depends on you", "button": "Score my founder dependence",
