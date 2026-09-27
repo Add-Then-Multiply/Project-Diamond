@@ -226,18 +226,18 @@ const METRICS = [
  {p:"deal", t:"Revenue growth", q:"What is your year-on-year revenue growth over the past 12–24 months?", o:[
   "Declining or flat", "Single-digit growth (1–15%)", "Solid growth (16–40%)",
   "High growth (41–100%)", "Exceptional growth (over 100% year on year)"]},
- {p:"deal", t:"Gross margin and unit economics", q:"What is your fully loaded gross margin?", o:[
-  "Below 30%, or losing money on each customer once acquisition cost is counted",
-  "30–49%; roughly break-even at the unit level",
-  "50–69%; each customer clearly profitable",
-  "70–79%; a clear path to strong operating leverage",
-  "80%+ with excellent lifetime-value economics"]},
- {p:"deal", t:"Revenue retention", q:"What happens to revenue from existing customers each year?", o:[
-  "We lose more than 20% of existing revenue annually",
-  "We retain 80–94%; churn is eroding growth",
-  "We retain 95–105%; a stable base with modest upsells",
-  "Existing customers grow 6–20% net each year through expansion",
-  "Existing customers grow more than 20% net each year, growth compounds without new sales"]},
+ {p:"deal", t:"Gross margin", q:"How does your gross margin compare with what is normal for your industry, once every direct cost is counted? (Normal varies widely: a food retailer may run on a few points of margin at high volume, a software business on 80% or more.)", o:[
+  "Below what is normal for our industry, or we lose money on each customer once the cost of winning them is counted",
+  "At the bottom of the normal range for our industry; roughly break-even on each customer",
+  "In line with our industry; each customer is clearly profitable",
+  "Above what is normal for our industry, and improving as we grow",
+  "Well above our industry, and each customer earns many times what it cost to win them"]},
+ {p:"deal", t:"Revenue from existing customers", q:"Over a year, what happens to the revenue you earn from the customers you already have?", o:[
+  "It falls by more than a fifth, because customers leave or spend less",
+  "It falls a little; losing customers is holding back our growth",
+  "It stays broadly the same: the little we lose is made up by existing customers buying more",
+  "It grows by 6 to 20%, because existing customers buy more from us",
+  "It grows by more than 20%, so we would grow even without new customers"]},
  {p:"deal", t:"Customer concentration", q:"How dependent are you on your largest customers?", o:[
   "One customer is over 40% of revenue, or the top five are over 75%",
   "Largest customer is 25–40% of revenue",
@@ -250,12 +250,12 @@ const METRICS = [
   "£1bn+ addressable market; clear differentiation; local leadership established",
   "£3bn+ expanding market; distinct category position; real switching costs",
   "£10bn+ opportunity; category-defining offer with network effects or a proprietary moat"]},
- {p:"deal", t:"Capital efficiency", q:"How efficiently does the business convert cash into growth?", o:[
-  "Burning cash with flat or declining revenue",
-  "Growth is heavily capital-intensive; every pound of growth costs well over two",
-  "Growth efficiency in line with market benchmarks",
-  "Highly efficient: close to a pound of burn per pound of new recurring revenue",
-  "Cash-flow positive (or near it) with accelerating growth"]},
+ {p:"deal", t:"The cost of winning a customer", q:"How does what it costs you to win a new customer compare with the revenue that customer brings in over the time they stay with you?", o:[
+  "We do not know what it costs us to win a customer, or it costs more than they bring in",
+  "A new customer brings in less than twice what it cost to win them",
+  "A new customer brings in two to three times what it cost to win them",
+  "A new customer brings in three to five times what it cost to win them, and we track it",
+  "A new customer brings in more than five times what it cost to win them, tracked by channel, and we earn the cost back within a year"]},
  {p:"deal", t:"Quality of earnings", q:"How well would your numbers withstand a buyer's forensic review?", o:[
   "Personal expenses, one-offs and inconsistent revenue recognition throughout",
   "Basic profit tracking; unverified adjustments; possible timing discrepancies",
