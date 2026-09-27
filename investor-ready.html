@@ -227,6 +227,7 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
           }catch(e){ return BOOKING_URL; }
         }
         function setBooking(el, ctx){ try{ if(el) el.href = bookingUrl(ctx); }catch(e){ if(el) el.href = BOOKING_URL; } }
+document.querySelectorAll("a.nav-cta").forEach(function(a){ setBooking(a, null); }); /* the header button carries the campaign source too */
 
         // Funding Scorecard bands. Thresholds are unchanged (>=80 / >=60 / else);
         // the agreed names make the tier explicit on the report and travel with

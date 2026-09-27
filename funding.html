@@ -141,6 +141,7 @@ function bookingUrl(ctx, search){
   }catch(e){ return BOOKING_URL; }
 }
 function setBooking(el, ctx){ try{ if(el) el.href = bookingUrl(ctx); }catch(e){ if(el) el.href = BOOKING_URL; } }
+document.querySelectorAll("a.nav-cta").forEach(function(a){ setBooking(a, null); }); /* the header button carries the campaign source too */
 
 document.querySelectorAll("a.book-cta, a.book-link").forEach(a => { setBooking(a, { assessment: "FFF" }); a.target = "_blank"; a.rel = "noopener"; });
 const ASSETS = [

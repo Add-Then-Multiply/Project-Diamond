@@ -253,5 +253,31 @@ section{margin-top:4.5rem;}
   });
 })();
 </script>
+<script>
+/* Booking hand-off: the header "Book a call" button carries the campaign source from this page's own address (nothing is stored). */
+const BOOKING_URL = "https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ";
+const FR_SOURCES = ["Investor Network","LinkedIn Organic","LinkedIn Paid","Website Organic","Referral","Partner","Event","Outbound","Existing Client","Founder Readiness Direct","Direct","Other"];
+function frNorm(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
+function frSource(search){
+  try{
+    const q = new URLSearchParams(search === undefined ? location.search : search);
+    const raw = q.get("utm_source") || q.get("src") || q.get("source");
+    if(!raw || !raw.trim()) return "Founder Readiness Direct";
+    return FR_SOURCES.find(v => frNorm(v) === frNorm(raw)) || "Other";
+  }catch(e){ return "Founder Readiness Direct"; }
+}
+function bookingUrl(ctx, search){
+  try{
+    const c = ctx || {}, p = [];
+    if(c.assessment) p.push("fr_assessment=" + encodeURIComponent(c.assessment));
+    if(typeof c.score === "number" && isFinite(c.score)) p.push("fr_score=" + encodeURIComponent(String(Math.round(c.score))));
+    if(c.band) p.push("fr_band=" + encodeURIComponent(c.band));
+    p.push("fr_source=" + encodeURIComponent(frSource(search)));
+    return BOOKING_URL + (BOOKING_URL.indexOf("?") < 0 ? "?" : "&") + p.join("&");
+  }catch(e){ return BOOKING_URL; }
+}
+function setBooking(el, ctx){ try{ if(el) el.href = bookingUrl(ctx); }catch(e){ if(el) el.href = BOOKING_URL; } }
+document.querySelectorAll("a.nav-cta").forEach(function(a){ setBooking(a, null); });
+</script>
 </body>
 </html>

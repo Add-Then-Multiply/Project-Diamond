@@ -76,6 +76,8 @@ const url = p => 'file://' + path.join(ROOT, p);
     const page = await ctx.newPage(); const errs = []; page.on('pageerror', e => errs.push(e.message));
     await page.goto(url(p)); await page.waitForTimeout(200);
     const submitSel = p === 'investor-ready.html' ? '#submit-btn' : 'button.cta';
+    // Ethical Acquisitions shows its questions and button only once a role is chosen.
+    if (p === 'ethical-acquisitions.html') { await page.evaluate(() => document.querySelector('input[name=q0][value=seller]').click()); await page.waitForTimeout(100); }
     await page.click(submitSel); await page.waitForTimeout(150);
     const unanswered = await page.evaluate(() => { const els = [...document.querySelectorAll('#form-error,#diag-err,[role=alert]')].filter(e => getComputedStyle(e).display !== 'none' && e.textContent.trim()); return els.map(e => e.textContent.trim().slice(0, 70))[0] || 'NO MESSAGE'; });
     const resultsShown = await page.evaluate(() => { const r = document.getElementById('results') || document.getElementById('results-section'); return r ? getComputedStyle(r).display !== 'none' && r.offsetHeight > 0 : null; });
