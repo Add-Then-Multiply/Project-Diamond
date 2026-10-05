@@ -1,50 +1,277 @@
-# ATM Founder Platform: repo instructions
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Advisor Console | Add Then Multiply</title>
+<style>
+:root{--ink:#111827;--slate:#475569;--bg:#F8FAFC;--line:#E2E8F0;--navy:#2B2A29;--accent:#C8231C;--brand:#E4342D;
+--good:#15803D;--warn:#B45309;--bad:#B91C1C;
+/* legacy names kept as aliases so existing rules and inline styles keep resolving */
+--primary:#2B2A29;--secondary:#111827;--text-main:#111827;--text-light:#475569;
+--bg-light:#F8FAFC;--white:#fff;--border:#E2E8F0;--error:#B91C1C;--success:#15803D;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+header{background:var(--navy);color:#fff;padding:0.9rem 0;border-bottom:4px solid var(--brand);}
+.container{max-width:1100px;margin:0 auto;padding:0 1.5rem;width:100%;}
+.header-content{display:flex;justify-content:space-between;align-items:center;gap:0.6rem 1.4rem;flex-wrap:wrap;}
+.logo{font-family:Georgia,serif;font-size:1.05rem;font-weight:700;}
+.logo span{color:#F38E00;}
+main{padding:2.5rem 0 4rem;}
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:1.3rem 1.4rem;margin-bottom:1.5rem;}
+h1{font-family:Georgia,serif;color:var(--navy);font-size:1.9rem;margin-bottom:.5rem;}
+h2{font-family:Georgia,serif;color:var(--navy);font-size:1.2rem;margin-bottom:1rem;}
+p.sub{color:var(--slate);font-size:0.98rem;max-width:66ch;margin-bottom:1.2rem;}
+label{display:block;font-weight:600;font-size:.8rem;margin:.9rem 0 .2rem;color:var(--navy);}
+input{width:100%;padding:.55rem .7rem;border:1px solid var(--line);border-radius:4px;font-size:.88rem;font-family:inherit;background:#fff;color:var(--ink);}
+button{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:.65rem 1.2rem;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;}
+button:hover{background:#A61D17;}
+button.ghost{background:transparent;color:var(--navy);border:1px solid var(--line);}
+button.ghost:hover{background:#fff;border-color:var(--navy);}
+button.small{padding:.3rem .7rem;font-size:.78rem;}
+.hidden{display:none!important;}
+.notice{padding:.6rem .9rem;border-radius:4px;margin:.8rem 0;font-size:.85rem;}
+.notice.ok{background:#DCFCE7;color:#14532D;}
+.notice.err{background:#FEE2E2;color:#7F1D1D;}
+.notice.info{background:#DBEAFE;color:#1E3A8A;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:6px;padding:1.2rem;text-align:center;}
+.kpi .n{font-family:Georgia,serif;font-size:2rem;font-weight:700;color:var(--navy);}
+.kpi .l{font-size:.72rem;color:var(--slate);text-transform:uppercase;letter-spacing:.18em;font-weight:600;}
+.kpi.warn .n{color:var(--warn);}.kpi.red .n{color:var(--bad);}
+table{width:100%;border-collapse:collapse;font-size:.88rem;}
+th{text-align:left;background:var(--bg);color:var(--navy);padding:.5rem .6rem;border-bottom:2px solid var(--line);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;}
+td{padding:.5rem .6rem;border-bottom:1px solid var(--line);vertical-align:top;}
+.tag{display:inline-block;padding:.15rem .55rem;border-radius:99px;font-size:.7rem;font-weight:700;letter-spacing:.05em;}
+.tag.exit{background:#DCFCE7;color:#14532D;}
+.tag.deal{background:#FDECEB;color:#A61D17;}
+.muted{color:var(--slate);font-size:.85rem;}
+.right{text-align:right;}
+.redflag{color:var(--bad);font-weight:700;}
+footer{border-top:1px solid var(--line);color:var(--slate);font-size:.78rem;text-align:center;padding:1.4rem 0;margin-top:1rem;}
+a{color:var(--accent);font-weight:600;text-decoration:none;}
+a:hover{text-decoration:underline;}
+@media(max-width:640px){.container{padding:0 1rem;}}
+.advisor-strip{background:#fff;border-bottom:1px solid var(--line);}
+.advisor-strip .as-inner{max-width:1100px;margin:0 auto;padding:0.55rem 1.5rem;display:flex;flex-wrap:wrap;gap:0.35rem 1.1rem;align-items:center;}
+.advisor-strip .as-label{letter-spacing:0.18em;font-size:0.66rem;color:var(--slate);text-transform:uppercase;font-weight:700;}
+.advisor-strip a{color:var(--navy);font-weight:600;font-size:0.8rem;text-decoration:none;}
+.advisor-strip a:hover{color:var(--accent);text-decoration:underline;}
+.advisor-strip a.active{color:var(--accent);}
+</style>
+</head>
+<body>
+<header><div class="container header-content">
+  <div class="logo">ADD THEN <span>MULTIPLY</span> · Advisor Console</div>
+  <div><span id="whoami" class="muted" style="color:#CBD5E1;"></span>
+  <button id="btn-signout" class="ghost small hidden" style="color:#fff;border-color:#94A3B8;margin-left:.8rem;">Sign out</button></div>
+</div></header>
+<!-- Advisor tier: revealed only for advisor/admin roles (see revealAdvisorStrip) -->
+<div id="advisor-strip" class="advisor-strip hidden">
+  <div class="as-inner">
+    <span class="as-label">Advisor tools</span>
+    <a href="intake.html">Founder Intake</a>
+    <a href="exit-ready-workspace.html">Exit Ready Workspace</a>
+    <a href="deal-ready-workspace.html">Deal Ready Workspace</a>
+    <a href="advisor-console.html" class="active">Advisor Console</a>
+    <a href="investor-mandates.html">Investor Mandates</a>
+  </div>
+</div>
+<main><div class="container">
 
-This repo is the **ATM Founder Platform** for addthenmultiply.com: David B Horne's advisory practice (author of *Add Then Multiply* and *Funded Female Founders*). Built by Madeleine Joubert for David. It productises ATM's two advisory service lines so one advisor runs many concurrent founder engagements.
+  <section id="view-auth" class="card" style="max-width:520px;margin:2rem auto;">
+    <h1>Advisor sign-in</h1>
+    <p class="sub">The console is for advisors and admins. Enter your email for a magic link.</p>
+    <label for="auth-email">Email address</label>
+    <input id="auth-email" type="email" placeholder="you@addthenmultiply.com" autocomplete="email">
+    <div style="margin-top:1rem;"><button id="btn-magic">Send magic link</button></div>
+    <div id="auth-msg"></div>
+  </section>
 
-**Core rule of the product:** AI drafts, analyses, tracks and assembles; the human advisor (David) decides, relates and signs off. Nothing customer-facing ships without a named human approval. Encode this in the UX and the database. This is a product quality gate, not a regulatory role: public copy must not describe it as an advisor approving deal flow (see the regulatory position under Hard rules).
+  <section id="view-denied" class="card hidden" style="max-width:560px;margin:2rem auto;">
+    <h1>Advisor access required</h1>
+    <p class="sub">Your account is signed in but does not hold the advisor or admin role.
+    Roles are granted by the administrator in the database, ask Madeleine or David.</p>
+  </section>
 
-## The platform (four-tier value stream)
+  <section id="view-console" class="hidden">
+    <h1>Portfolio</h1>
+    <p class="sub">Every engagement you advise, at a glance: phases, open gaps, red flags, documents and the sign-off state. This is the scale dashboard: many concurrent engagements, one advisor, audit-defensible quality.</p>
+    <div class="kpis" id="kpis"></div>
+    <div class="card">
+      <h2>Engagements</h2>
+      <div id="portfolio-table"><span class="muted">Loading…</span></div>
+    </div>
+    <div class="card">
+      <h2>Attention required</h2>
+      <div id="attention"><span class="muted">Loading…</span></div>
+    </div>
+  </section>
 
-Public site pages (all single-file HTML): `index.html` (overview + value stream + ecosystem) · `diagnostic.html` (the free front-door **Multiplier Diagnostic**: 20 questions across six themes, 1–5 scale, finance/funding/exit weighted ×1.5, bands Highly Ready 91+ / Strong Potential 71 / Emerging 41 / At Risk) · `transaction-readiness.html` (the deal-grade **Transaction Readiness Assessment**: 24 weighted metrics, Exit 35% / Deal 40% / Operational 25%, 1–5 rubric per metric, bands Transaction-Ready 85+ / Readiness Project Candidate 70 / Roadmap Tier 50 / Foundation Tier) · `investor-ready.html` (14-question Funding Scorecard, bands Raise Ready 80+ / Almost Ready 60 / Getting Ready) · `ethical-acquisitions.html` (Ethical Acquisitions Scorecard) · `roadmap.html` · `finance-advisory.html` (Insourcing: Finance Advisory, with a free FA self-assessment) · `pitch.html` (Pitching, framed for FACE, with a free PI self-assessment) · `commercial-acceleration.html` (Commercial Acceleration, with a free CA self-assessment) · `readiness-project.html` (the three engagement tiers and the turnover tiers) · `funding.html` (FFF module: assets checklist, capital-routes table, promotion-language checker, grant application builder) · `investors.html` (institutional investor relationships, no count published) · `founders.html` (3,000 founder CEO network).
+</div></main>
+<footer><div class="container">Add Then Multiply · Advisor Console · Private and confidential.</div></footer>
 
-**The six front doors on `index.html`, in order:** Funding Scorecard (Fund) · Grow by Acquiring (Acquire) · Commercial Acceleration (Consolidate) · Insourcing: Finance Advisory (Consolidate) · Pitching (Fund and Exit) · Exit Ready (Exit). All six are FACE. **Never reintroduce "Pitch, Publish, Product", the Key Person of Influence method or any Dent Global wording**: there is no agreement to use that IP. `product.html` and `publish.html` were deleted for that reason.
+<script src="assets/supabase.js"></script>
+<script>
+"use strict";
+/* ================= CONFIG ================= */
+const SUPABASE_URL = "https://wfejarowrlalwgbqvloi.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_m2UUeC-YZWe7UVyYX553SA_6jHP2M5x";
+const EXIT_PHASES = ["Founder Clarity","Gap Analysis","Business Readiness","Transaction Execution"];
+const DEAL_PHASES = ["Strategic Logic","Target ID","Human Approach","Founder-to-Founder","HoT & DD","SPA & Completion","Integration"];
 
-**Header nav, every public page:** Overview · Funding Scorecard · Exit Ready · Services (`index.html#services`) · Network (`investors.html`) · a red "Book a call" button (`a.nav-cta`, the `BOOKING_URL`). `exit-ready.html` is a legacy redirect to the diagnostic and `sourcing.html` is a legacy redirect to `finance-advisory.html`; keep both. `deal-ready.html` is now the "Grow by Acquiring" landing page (the acquisition fork from the homepage hero).
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+let session=null, profile=null;
 
-**The two scored front doors are different instruments and must not be conflated:** `diagnostic.html` is the 20-question Multiplier Diagnostic; `transaction-readiness.html` is the 24-metric Transaction Readiness Assessment. They have different band vocabularies. Booking hand-offs tag the latter as `RD`, see `GHL-DATA-MAP.md`.
+const $ = (id)=>document.getElementById(id);
+const esc = (s)=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function show(view){ ["view-auth","view-denied","view-console"].forEach(v=>$(v).classList.toggle("hidden", v!==view)); }
+function msg(el,text,cls){ $(el).innerHTML = text ? `<div class="notice ${cls}">${esc(text)}</div>` : ""; }
 
-Authenticated pages (behind the paid workspace boundary): `intake.html` · `exit-ready-workspace.html` · `deal-ready-workspace.html` · `investor-mandates.html` (advisor-only register) · `advisor-console.html`.
+/* Pure helper: portfolio aggregation (tested by runTests) */
+/* Which workspace an engagement belongs in, deep-linked to that engagement.
+   Pure: covered by runTests(). */
+function workspaceHref(asset, id){
+  const page = asset === "deal_ready" ? "deal-ready-workspace.html" : "exit-ready-workspace.html";
+  return id ? page + "?eng=" + encodeURIComponent(id) : page;
+}
 
-Value stream: **Diagnostics (free) → Personalised Roadmap → Insource Sourcing → Readiness Project (full engagement)**, which maps onto the ATM Exit Advisory phases (Founder Clarity → Gap Analysis → Business Readiness → Transaction Execution) and the 7-phase M&A Advisory Process. Content taxonomy is the **FACE methodology** (Fund, Acquire, Consolidate, Exit). Full design: `BLUEPRINT.md`.
+function summarise(engagements, gaps, dd, docs, signoffs){
+  const byEng = (rows, key)=>rows.reduce((m,r)=>{ (m[r.engagement_id] = m[r.engagement_id]||[]).push(r); return m; },{});
+  const gapsBy = byEng(gaps), ddBy = byEng(dd), docsBy = byEng(docs), signsBy = byEng(signoffs);
+  return engagements.map(e=>{
+    const g = gapsBy[e.id]||[], d = ddBy[e.id]||[], dc = docsBy[e.id]||[], s = signsBy[e.id]||[];
+    const phases = e.asset==="exit_ready" ? EXIT_PHASES : DEAL_PHASES;
+    return {
+      id:e.id, company:e.company_name, asset:e.asset, status:e.status,
+      phase:e.phase, phaseName:phases[e.phase-1]||"?", phaseCount:phases.length,
+      openGaps: g.filter(x=>x.status!=="closed").length,
+      redFlags: d.filter(x=>x.red_flag).length,
+      docsApproved: dc.filter(x=>x.status==="approved").length,
+      docsTotal: dc.length,
+      lastSignoff: s.length ? s.map(x=>x.signed_at).sort().slice(-1)[0] : null
+    };
+  });
+}
 
-Voice: ATM founder-first, warm, direct, UK English ("an exit is a life event"). Rigour in substance, warmth in tone, never institutional jargon. **No em dashes anywhere: copy, code comments, docs.** Use commas, colons, brackets or full stops instead (David Horne's rule, September 2026).
+async function init(){
+  // Surface magic-link failures (Supabase returns them in the URL fragment)
+  const authParams = new URLSearchParams(location.hash.replace(/^#/, ""));
+  if(authParams.get("error") || authParams.get("error_code")){
+    const code = authParams.get("error_code") || authParams.get("error");
+    const friendly = code === "otp_expired"
+      ? "That sign-in link has expired \u2014 they only last a short while, and each one works once. Enter your email below and we\u2019ll send a fresh one."
+      : "Sign-in didn\u2019t complete (" + (authParams.get("error_description") || code).replace(/\+/g, " ") + "). Enter your email below to request a new link.";
+    history.replaceState(null, "", location.pathname);
+    setTimeout(()=>msg("auth-msg", friendly, "err"), 0);
+  }
+  // Route from the auth event only. onAuthStateChange fires INITIAL_SESSION
+  // as soon as it subscribes, so calling getSession() and route() here too
+  // ran the whole view twice on load, duplicate fetches and a visible flicker.
+  sb.auth.onAuthStateChange((_e, s2)=>{ session = s2; route(); });
+}
 
-**Visual system (the live palette: every page declares it in one `:root` block):** ink `#111827` · slate `#475569` · off-white background `#F8FAFC` · borders `#E2E8F0` · charcoal `#2B2A29` (`--navy`: header bars, headings, booking-CTA anchors) · brand red `#E4342D` (`--brand`: the 4px rule under every header bar, the hero mark, door-card tops, fills where no text sits on the colour) · accent red `#C8231C` (`--accent`: form/submit buttons, links, the nav "Book a call" button; this darker shade keeps white-on-red and red-on-white text at AA contrast, which the pure brand red does not) with hover `#A61D17` · brand-mark orange `#F38E00` (the "MULTIPLY" wordmark only) · Georgia serif headings, system sans body. Status tokens: good `#15803D`, warn `#B45309`, bad `#B91C1C`. Amber `#B45309` is a status token only; it is no longer a button or link colour. The header stays dark.
+/* Advisor tier navigation: shown only to advisor/admin roles. */
+function revealAdvisorStrip(role){
+  const el = document.getElementById("advisor-strip");
+  if(!el) return false;
+  const allowed = ["advisor","admin"].includes(role);
+  el.classList.toggle("hidden", !allowed);
+  return allowed;
+}
 
-CTA rule: **booking/navigation anchors (`a.cta`, `a.book-cta`) are charcoal `--navy`; form and submit buttons (`button.cta`, `.btn`, `button.gold`) and the nav `a.nav-cta` are accent red `--accent`.** No other primary-action colours: there is no accent blue on the site, and `#0A192F`/`#D4AF37` (a former gold-on-dark identity) must never reappear.
+async function route(){
+  if(!session){ show("view-auth"); $("btn-signout").classList.add("hidden"); $("whoami").textContent=""; return; }
+  $("btn-signout").classList.remove("hidden");
+  $("whoami").textContent = session.user.email;
+  const {data:p} = await sb.from("profiles").select("*").eq("id", session.user.id).single();
+  profile = p;
+  revealAdvisorStrip(profile && profile.role);
+  if(!profile || !["advisor","admin"].includes(profile.role)){ show("view-denied"); return; }
+  show("view-console");
+  await loadPortfolio();
+}
+$("btn-magic").onclick = async ()=>{
+  const email = $("auth-email").value.trim();
+  if(!email){ msg("auth-msg","Enter your email address.","err"); return; }
+  msg("auth-msg","Sending magic link…","info");
+  const {error} = await sb.auth.signInWithOtp({email, options:{emailRedirectTo: window.location.href.split("#")[0]}});
+  msg("auth-msg", error ? error.message : "Check your inbox.", error?"err":"ok");
+};
+$("btn-signout").onclick = async ()=>{ await sb.auth.signOut(); };
 
-## Hard rules
+async function loadPortfolio(){
+  const [{data:engs,error:e1},{data:gaps},{data:dd},{data:docs},{data:signs}] = await Promise.all([
+    sb.from("engagements").select("*").order("created_at",{ascending:false}),
+    sb.from("gap_items").select("engagement_id,status"),
+    sb.from("dd_items").select("engagement_id,red_flag"),
+    sb.from("documents").select("engagement_id,status"),
+    sb.from("human_signoffs").select("engagement_id,signed_at")
+  ]);
+  if(e1){ $("portfolio-table").innerHTML = `<div class="notice err">${esc(e1.message)}</div>`; return; }
+  const rows = summarise(engs||[], gaps||[], dd||[], docs||[], signs||[]);
 
-- Self-contained single-file HTML pages: inline CSS/JS, no build step, no frameworks, avoid external CDNs. Mobile-responsive. **UK English everywhere.**
-- **Every assessment is free and ungated; the report is the opt-in.** All seven instruments show the full written report with no sign-up. Under the report on the four scored instruments (`diagnostic.html`, `transaction-readiness.html`, `investor-ready.html`, `ethical-acquisitions.html`) sits one opt-in, "Send me my report": name, work email, company, role and an explicit consent tick. On submit the answers, score, band, those details and the rendered report are written to `leads` (`report_requested`, `report_html`) and the `send-report` Edge Function emails the copy through Resend. Nothing is written until the founder presses that button. The three eight-statement self-assessments and `funding.html` write nothing at all. (Decision of 6 September, replacing the gate: the gate cost completions and promised nothing in return.)
-- **No tracking, still.** No analytics, no ad pixels, no cookies, and nothing in localStorage or sessionStorage anywhere on the site. Campaign source is read from the URL and passed straight to the booking link; it is never persisted. Because nothing is stored on the visitor's device, no PECR cookie banner is required, keep it that way, and if that ever changes the banner has to land in the same change.
-- Auth (Supabase magic-link) still begins only at the paid workspace boundary. The report opt-in is lead capture, not an account.
-- All AI calls go through Supabase Edge Functions (Claude API, server-side). Never call AI from the browser; never commit the service-role key or any API secret. Supabase URL + anon key live in one config constant.
-- Phase advancement requires a `human_signoffs` row (advisor/admin only), enforce the gate in Postgres, not just the UI. Log every AI call to `ai_runs` (task, model, input hash, output, timestamp).
-- Every diagnostic scoring engine ships with a browser-console `runTests()` harness; run it after any scoring change.
-- The Readiness Call CTA uses a single `BOOKING_URL` constant (the GoHighLevel scheduler link, swap in one place if the calendar changes).
-- Deploys: GitHub Pages. If Actions-path deploys fail repeatedly, use the legacy build trigger: `POST /repos/{owner}/{repo}/pages/builds`.
-- **Brand isolation:** ATM assets only. Never copy content, code or links from any other client's repositories or websites.
-- **Regulatory guardrail (FCA):** the platform must never arrange investments, match founders to investors, or publish financial promotions. Investor introductions are made only by David, acting as an officer of the client company for and on behalf of that company, offline; never by the platform (David's decision of 26 September, replacing the specialist transaction partner). Keep the wording on `investors.html` ("does not arrange investments…") intact in spirit whenever editing.
-- **Verified numbers only:** the 3,000 founder CEO network is a real, owner-verified figure. The investor base is described as "an extensive network of institutional investor relationships" and no count is published until David confirms a verified figure. Do not invent statistics; book-sourced claims ($8.7tn opportunity, 13× warm introductions, Kanze research) must keep their citations.
-- **Commercial terms are private:** the Story-C Ltd / ATM revenue-share agreement is documented in a private annex outside this repo. Never publish fee splits, settlement terms or the ownership structure on the public site. The only public price is Marcus's client-facing line on `finance-advisory.html`: "Insourced Finance Function from £1,000 plus VAT per month, with final pricing agreed following scoping." Commercial Acceleration copy stays generic: no client names, contract values or board dates.
-- **Turnover tiers (awaiting David's sign-off):** Project One £1m to under £20m · Project Two £20m to under £200m · Scaling £200m and above. Three continuous tiers, no gaps. Turnover guides the initial routing; the Readiness Call confirms need and complexity, and the copy says so.
-- **Pipeline language:** leads progress through business stages (steps 1 to 5); never describe them as hot or cold.
-- **Regulatory position (Eversheds-cleared, wording is David's decision):** Add Then Multiply is not authorised or regulated by the FCA. Fundraising and M&A work is led by David as an officer of the client company (CFO or similar, often a legal director), for and on behalf of that company. Preparing a business for sale is not, in itself, a regulated activity (David's original line, "exits are not a regulated activity", was softened on Marcus's advice, 6 September). Public copy must never imply ATM is a regulated adviser, that an advisor "approves" deal flow, or that ATM itself conducts regulated fundraising or M&A.
+  const active = rows.filter(r=>r.status==="active");
+  const totalRed = rows.reduce((a,r)=>a+r.redFlags,0);
+  const totalGaps = rows.reduce((a,r)=>a+r.openGaps,0);
+  $("kpis").innerHTML = `
+    <div class="kpi"><div class="n">${rows.length}</div><div class="l">Engagements</div></div>
+    <div class="kpi"><div class="n">${active.length}</div><div class="l">Active</div></div>
+    <div class="kpi ${totalGaps?"warn":""}"><div class="n">${totalGaps}</div><div class="l">Open gap items</div></div>
+    <div class="kpi ${totalRed?"red":""}"><div class="n">${totalRed}</div><div class="l">DD red flags</div></div>`;
 
-## Build sequence
+  $("portfolio-table").innerHTML = rows.length ? `<table>
+    <tr><th>Company</th><th>Asset</th><th>Phase</th><th>Open gaps</th><th>Red flags</th><th>Docs approved</th><th>Last sign-off</th><th></th></tr>
+    ${rows.map(r=>`<tr>
+      <td><strong>${esc(r.company)}</strong><div class="muted">${esc(r.status)}</div></td>
+      <td><span class="tag ${r.asset==="exit_ready"?"exit":"deal"}">${r.asset==="exit_ready"?"Exit Ready":"Deal Ready"}</span></td>
+      <td>${r.phase}/${r.phaseCount}: ${esc(r.phaseName)}</td>
+      <td>${r.openGaps||"–"}</td>
+      <td>${r.redFlags?`<span class="redflag">${r.redFlags} ⚑</span>`:"–"}</td>
+      <td>${r.docsTotal?`${r.docsApproved}/${r.docsTotal}`:"–"}</td>
+      <td class="muted">${r.lastSignoff?new Date(r.lastSignoff).toLocaleDateString("en-GB"):"none"}</td>
+      <td class="right"><a href="${workspaceHref(r.asset, r.id)}">Open →</a></td>
+    </tr>`).join("")}</table>` : `<p class="muted">No engagements in your portfolio yet.</p>`;
 
-Sprint 1: diagnostic front doors (no Supabase) · Sprint 2: Supabase spine (schema in `BLUEPRINT.md` §5) · Sprint 3: Exit Ready workspace · Sprint 4: Deal Ready pipeline · Sprint 5: advisor console.
+  const attention = rows.filter(r=>r.redFlags>0 || r.openGaps>=3 || !r.lastSignoff);
+  $("attention").innerHTML = attention.length ? attention.map(r=>{
+    const why = [];
+    if(r.redFlags) why.push(`${r.redFlags} DD red flag${r.redFlags>1?"s":""}`);
+    if(r.openGaps>=3) why.push(`${r.openGaps} open gap items`);
+    if(!r.lastSignoff) why.push("no sign-off recorded yet");
+    return `<div class="notice ${r.redFlags?"err":"info"}"><strong>${esc(r.company)}</strong>: ${why.join(" · ")}</div>`;
+  }).join("") : `<div class="notice ok">Nothing urgent: no red flags, gap build-ups or missing sign-offs.</div>`;
+}
 
-Ask Madeleine for: Supabase credentials (Sprint 2), the scheduler URL, and sign-off on asset names before public launch.
+/* ================= TEST HARNESS ================= */
+window.runTests = function(){
+  const results=[]; const t=(name,pass)=>{results.push({name,pass}); console.log((pass?"✅":"❌")+" "+name);};
+  const engs=[{id:"e1",company_name:"A Ltd",asset:"exit_ready",phase:2,status:"active"},
+              {id:"e2",company_name:"B Ltd",asset:"deal_ready",phase:5,status:"active"}];
+  const gaps=[{engagement_id:"e1",status:"open"},{engagement_id:"e1",status:"closed"},{engagement_id:"e1",status:"open"}];
+  const dd=[{engagement_id:"e2",red_flag:true},{engagement_id:"e2",red_flag:false}];
+  const docs=[{engagement_id:"e1",status:"approved"},{engagement_id:"e1",status:"draft"}];
+  const signs=[{engagement_id:"e1",signed_at:"2026-07-01T10:00:00Z"},{engagement_id:"e1",signed_at:"2026-07-20T10:00:00Z"}];
+  const s = summarise(engs,gaps,dd,docs,signs);
+  t("two portfolio rows", s.length===2);
+  t("open gaps counts only non-closed", s[0].openGaps===2);
+  t("red flags counted for the right engagement", s[0].redFlags===0 && s[1].redFlags===1);
+  t("docs approved 1/2", s[0].docsApproved===1 && s[0].docsTotal===2);
+  t("last sign-off picks the latest", s[0].lastSignoff==="2026-07-20T10:00:00Z");
+  t("deal-ready phase name resolves from 7-phase list", s[1].phaseName==="HoT & DD");
+  t("workspace link routes by asset and carries the engagement id",
+    workspaceHref("exit_ready","e1")==="exit-ready-workspace.html?eng=e1" &&
+    workspaceHref("deal_ready","e2")==="deal-ready-workspace.html?eng=e2");
+  t("workspace link omits the query when there is no engagement id",
+    workspaceHref("deal_ready",null)==="deal-ready-workspace.html");
+  t("exit-ready phase count is 4, deal 7", s[0].phaseCount===4 && s[1].phaseCount===7);
+  const passed = results.filter(r=>r.pass).length;
+  console.log(`${passed}/${results.length} tests passed`);
+  return {passed, total:results.length, ok:passed===results.length};
+};
+
+init();
+</script>
+</body>
+</html>
