@@ -88,7 +88,7 @@ footer{border-top:1px solid var(--line);color:var(--slate);font-size:0.78rem;tex
 <section id="view-auth">
   <span class="kicker">Private workspace · your data, verified and secure</span>
   <h1>Tell us what you're building towards</h1>
-  <p class="lede">This intake takes about fifteen minutes and does two jobs: it gives your advisor the full picture before your first conversation, and it gives the platform's analysis engine verified data to work from, so everything drafted for you starts from facts, not guesses. Sign in to begin; everything you enter is private to you and your advisor.</p>
+  <p class="lede">This intake takes about fifteen minutes and does two jobs: it gives your advisor the full picture before your first working session, once your Readiness Call has confirmed the route, and it gives the platform's analysis engine verified data to work from, so everything drafted for you starts from facts, not guesses. Sign in to begin; everything you enter is private to you and your advisor.</p>
   <div class="card">
     <label class="f" for="auth-email">Email address</label>
     <input type="email" id="auth-email" placeholder="you@company.co.uk">
@@ -523,7 +523,7 @@ $("btn-save").onclick = async ()=>{
     prioracq:$("i-prioracq").value, leverage:$("i-leverage").value.trim(), pg:$("i-pg").checked,
   });
   const {error} = await sb.from("founder_intake").upsert(payload, {onConflict:"engagement_id"});
-  msg("intake-msg", error ? friendlyDbError(error) : "Saved. Your advisor sees this before your first conversation.", error?"err":"ok");
+  msg("intake-msg", error ? friendlyDbError(error) : "Saved. Your advisor sees this before your first working session.", error?"err":"ok");
 };
 
 /* ===== DOCUMENT UPLOADS ===== */
