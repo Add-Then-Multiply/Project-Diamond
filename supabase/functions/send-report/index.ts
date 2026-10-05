@@ -5,11 +5,22 @@
 // row and mark it sent. Sends through Resend. Never returns the row to the
 // caller, and never sends twice.
 //
+// It also creates or updates the founder's GoHighLevel contact (first name,
+// email, assessment code, score and band) so the call team knows who they are.
+// That step is optional: with no GHL_API_KEY set it is skipped, and if it
+// fails the report still goes out. The outcome is recorded on the lead.
+//
 // Environment (set with `supabase secrets set`):
-//   RESEND_API_KEY   the Resend API key
-//   REPORT_FROM      e.g. "Add Then Multiply <reports@addthenmultiply.com>"
-//   REPORT_BCC       optional: an adviser inbox that receives every copy
-//   SITE_URL         e.g. https://addthenmultiply.github.io/Project-Diamond
+//   RESEND_API_KEY      the Resend API key
+//   REPORT_FROM         e.g. "Add Then Multiply <info@mail.addthenmultiply.com>"
+//   REPORT_REPLY_TO     optional: where replies go, e.g. hello@addthenmultiply.com
+//   REPORT_BCC          optional: a team inbox that receives every copy
+//   SITE_URL            e.g. https://addthenmultiply.github.io/Project-Diamond
+//   GHL_API_KEY         optional: GoHighLevel private integration token (contacts write)
+//   GHL_LOCATION_ID     the GoHighLevel sub-account (location) id; required with GHL_API_KEY
+//   GHL_FIELD_ASSESSMENT, GHL_FIELD_SCORE, GHL_FIELD_BAND
+//                       optional: custom field ids to fill; without them the
+//                       values travel as tags only
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by the platform.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -33,6 +44,57 @@ const PAGE_FOR: Record<string, string> = {
   ethical_acquisitions: "ethical-acquisitions.html",
 };
 
+// The assessment codes David agreed on 20 September (see GHL-DATA-MAP.md).
+const CODE_FOR: Record<string, string> = {
+  multiplier_diagnostic: "MD",
+  investor_ready: "IR",
+  transaction_readiness: "RD",
+  ethical_acquisitions: "EA",
+};
+
+function slug(s: unknown): string {
+  return String(s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+// Create or update the GoHighLevel contact for a lead. Returns the contact id,
+// null when GoHighLevel is not configured, or throws with the reason.
+async function syncToGhl(lead: Record<string, unknown>): Promise<string | null> {
+  const token = Deno.env.get("GHL_API_KEY");
+  if (!token) return null;
+  const locationId = Deno.env.get("GHL_LOCATION_ID");
+  if (!locationId) throw new Error("GHL_LOCATION_ID not set");
+  const code = CODE_FOR[String(lead.instrument)] ?? "FR";
+  const tags = [`fr-${code.toLowerCase()}`, `fr-${code.toLowerCase()}-${slug(lead.band)}`, "fr-report-requested"];
+  const customFields: { id: string; field_value: unknown }[] = [];
+  const field = (env: string, value: unknown) => {
+    const id = Deno.env.get(env);
+    if (id) customFields.push({ id, field_value: value });
+  };
+  field("GHL_FIELD_ASSESSMENT", code);
+  field("GHL_FIELD_SCORE", lead.score_pct);
+  field("GHL_FIELD_BAND", lead.band);
+  const body: Record<string, unknown> = {
+    locationId,
+    firstName: lead.first_name ?? undefined,
+    email: lead.email,
+    source: "ATM Founder Platform",
+    tags,
+  };
+  if (customFields.length) body.customFields = customFields;
+  const r = await fetch("https://services.leadconnectorhq.com/contacts/upsert", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, Version: "2021-07-28", "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  const text = await r.text();
+  if (!r.ok) throw new Error(`GoHighLevel ${r.status}: ${text.slice(0, 300)}`);
+  try {
+    return JSON.parse(text)?.contact?.id ?? "";
+  } catch {
+    return "";
+  }
+}
+
 function escape(s: unknown): string {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
 }
@@ -54,6 +116,16 @@ Deno.serve(async (req) => {
     }
     if (lead.report_sent_at) return new Response(JSON.stringify({ ok: true, already: true }), { headers: { ...cors, "Content-Type": "application/json" } });
 
+    // Hand the founder to GoHighLevel first; a failure here never stops the report.
+    try {
+      const contactId = await syncToGhl(lead);
+      if (contactId !== null) {
+        await admin.from("leads").update({ ghl_contact_id: contactId || null, ghl_synced_at: new Date().toISOString(), ghl_error: null }).eq("id", lead.id);
+      }
+    } catch (e) {
+      await admin.from("leads").update({ ghl_error: String(e).slice(0, 500) }).eq("id", lead.id);
+    }
+
     const name = INSTRUMENT_NAMES[lead.instrument] ?? "assessment";
     const site = (Deno.env.get("SITE_URL") ?? "https://addthenmultiply.github.io/Project-Diamond").replace(/\/$/, "");
     const page = `${site}/${PAGE_FOR[lead.instrument] ?? "index.html"}`;
@@ -62,11 +134,11 @@ Deno.serve(async (req) => {
 <div style="background:#2B2A29;border-bottom:4px solid #E4342D;padding:18px 24px;color:#fff;font-family:Georgia,serif;font-size:18px;">ADD THEN <span style="color:#F38E00">MULTIPLY</span></div>
 <div style="max-width:680px;margin:0 auto;padding:24px;">
 <p style="font-size:15px;">Hello ${first},</p>
-<p style="font-size:15px;">Here is your ${escape(name)} report: <b>${escape(lead.score_pct)}%</b>, <b>${escape(lead.band)}</b>. An adviser will read it before your Readiness Call. Nothing in it is financial or investment advice; it indicates readiness, and what to do next is a recommendation we make on the call.</p>
+<p style="font-size:15px;">Here is your ${escape(name)} report: <b>${escape(lead.score_pct)}%</b>, <b>${escape(lead.band)}</b>. A member of our team reads every report before a Readiness Call. Nothing in it is financial or investment advice: it shows how ready the business is, and what to do next is a recommendation we make with you on the call.</p>
 <div style="background:#fff;border:1px solid #E2E8F0;border-radius:6px;padding:18px;font-size:14px;line-height:1.55;">${lead.report_html ?? "<p>Your report is on the page you completed; open the link below to see it again.</p>"}</div>
 <p style="margin-top:20px;"><a href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" style="display:inline-block;background:#2B2A29;color:#fff;padding:12px 20px;border-radius:4px;text-decoration:none;font-weight:600;">Book your free Readiness Call</a></p>
 <p style="font-size:13px;color:#475569;">Take the assessment again: <a href="${page}" style="color:#C8231C;">${page}</a></p>
-<p style="font-size:12px;color:#475569;border-top:1px solid #E2E8F0;padding-top:12px;margin-top:24px;">Add Then Multiply Limited is registered in England and Wales, company number 04623437. It is not authorised or regulated by the Financial Conduct Authority. This email describes advisory services and is not a financial promotion. You asked for this copy on our website; we will not add you to any list without a separate consent. To have your details deleted, reply to this email.</p>
+<p style="font-size:12px;color:#475569;border-top:1px solid #E2E8F0;padding-top:12px;margin-top:24px;">Add Then Multiply Limited is registered in England and Wales, company number 04623437. It is not authorised or regulated by the Financial Conduct Authority. This email describes our services and is not a financial promotion. You asked for this copy on our website; we will not add you to any list without a separate consent. To have your details deleted, reply to this email.</p>
 </div></body></html>`;
 
     const key = Deno.env.get("RESEND_API_KEY");
@@ -75,11 +147,13 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ ok: false, error: "mail not configured" }), { status: 503, headers: { ...cors, "Content-Type": "application/json" } });
     }
     const payload: Record<string, unknown> = {
-      from: Deno.env.get("REPORT_FROM") ?? "Add Then Multiply <reports@addthenmultiply.com>",
+      from: Deno.env.get("REPORT_FROM") ?? "Add Then Multiply <info@mail.addthenmultiply.com>",
       to: [lead.email],
       subject: `Your ${name} report: ${lead.score_pct}%, ${lead.band}`,
       html: body,
     };
+    const replyTo = Deno.env.get("REPORT_REPLY_TO");
+    if (replyTo) payload.reply_to = replyTo;
     const bcc = Deno.env.get("REPORT_BCC");
     if (bcc) payload.bcc = [bcc];
     const r = await fetch("https://api.resend.com/emails", {

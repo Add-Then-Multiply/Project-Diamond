@@ -215,9 +215,18 @@ Two consequences worth planning for on your side:
 - **You will have the same person in two places.** A founder who completes an
   assessment and then books appears once in `leads` (with their answers) and
   once in GHL (from the booking form). The join key is the email address they
-  typed in each, which may differ. If you want them reconciled, the cleanest
-  route is a scheduled export from `leads` into GHL keyed on email, tell us
-  and we will scope it.
+  typed in each, which may differ. **Built, waiting for your key (October
+  2026):** when a founder presses "Send me my report", the `send-report`
+  function now also creates or updates the GHL contact (upsert on email) with
+  first name, email, the assessment code, score and band. Tags:
+  `fr-<code>` (for example `fr-md`), `fr-<code>-<band>` (for example
+  `fr-md-strong-potential`) and `fr-report-requested`; source "ATM Founder
+  Platform". It switches on when these Supabase secrets are set:
+  `GHL_API_KEY` (a private integration token with contacts write),
+  `GHL_LOCATION_ID`, and optionally `GHL_FIELD_ASSESSMENT`, `GHL_FIELD_SCORE`
+  and `GHL_FIELD_BAND` (custom field ids, if you want the values in fields as
+  well as tags). The outcome is recorded on the lead (`ghl_contact_id`,
+  `ghl_synced_at`, `ghl_error`); a GHL failure never stops the report email.
 - **Consent is recorded per assessment, not globally.** The `leads.consent`
   column records that the founder agreed to ATM storing their answers and
   contacting them about their results, at that timestamp. It is not consent
