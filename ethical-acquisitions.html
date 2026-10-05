@@ -383,8 +383,35 @@ function offerReport(){
   if(gate) gate.style.display = "block";
 }
 function reportHtml(){
+  /* The emailed copy cannot use this page's stylesheet: email programs drop
+     classes and CSS variables. So copy the report and write the look of each
+     element onto it as plain inline styles, then strip classes and ids. */
   const full = document.getElementById("fullReport");
-  return full ? full.innerHTML.slice(0, 120000) : "";
+  if(!full) return "";
+  const PROPS = ["color","background-color","font-size","font-weight","font-style","font-family","line-height","text-align",
+    "margin-top","margin-right","margin-bottom","margin-left","padding-top","padding-right","padding-bottom","padding-left",
+    "border-top-width","border-top-style","border-top-color","border-right-width","border-right-style","border-right-color",
+    "border-bottom-width","border-bottom-style","border-bottom-color","border-left-width","border-left-style","border-left-color",
+    "border-radius","display","list-style-type"];
+  const copy = full.cloneNode(true);
+  const src = [full, ...full.querySelectorAll("*")], dst = [copy, ...copy.querySelectorAll("*")];
+  src.forEach((el, n) => {
+    const out = dst[n], cs = getComputedStyle(el);
+    if(cs.display === "none"){ out.remove(); return; }
+    const keepWidth = el.style && el.style.width;   // bar fills carry their percentage inline
+    let css = PROPS.map(p => {
+      const v = cs.getPropertyValue(p);
+      if(!v || v === "0px" || v === "none" || v === "normal" || v === "rgba(0, 0, 0, 0)" || (p.indexOf("border") === 0 && cs.getPropertyValue(p.replace(/(color|width)$/,"style")) === "none")) return "";
+      return p + ":" + v;
+    }).filter(Boolean).join(";");
+    if(keepWidth) css += ";width:" + keepWidth;
+    if(!el.children.length && !el.textContent.trim() && parseFloat(cs.height) > 0) css += ";height:" + cs.height;
+    out.setAttribute("style", css);
+    out.removeAttribute("class"); out.removeAttribute("id");
+  });
+  copy.querySelectorAll("a[href]").forEach(a => a.setAttribute("href", a.href));   // page-relative links would break in an email
+  copy.querySelectorAll('a[href*="leadconnectorhq.com"]').forEach(a => { const p = a.closest("p"); (p && p.textContent.trim() === a.textContent.trim() ? p : a).remove(); });
+  return copy.innerHTML.slice(0, 120000);
 }
 function showSent(email){
   const gate = document.getElementById("leadgate");
@@ -407,7 +434,7 @@ function renderResults(){
     `<li><b>Q${num(r.i)}:</b> ${allQs[r.i]} <span style="color:var(--slate)">(you answered ${r.a}/5, ${SCALE[r.a-1]})</span></li>`).join("");
   const cfg = routing ? routing.find(r=>r.band_slug === bandSlug(band.label)) : null;
   let svcHtml = cfg ? `<b>Your ATM service match:</b> ${cfg.service}` : band.svc;
-  svcHtml += `<br><span style="font-size:0.8rem;color:var(--slate);">This is an automated suggestion from your answers; an adviser confirms the next step on the Readiness Call.</span>`;
+  svcHtml += `<br><span style="font-size:0.8rem;color:var(--slate);">This is an automated suggestion from your answers; a member of our team confirms the next step with you on the Readiness Call.</span>`;
   if(cfg && cfg.partner_only){
     svcHtml += `<br><span style="font-size:0.8rem;color:var(--slate);">Any introduction to investors is made by David as an officer of your company, for and on its behalf.</span>`;
   }
