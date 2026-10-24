@@ -182,7 +182,7 @@ a.jump:hover{background:#A61D17;color:#fff;}
 <p id="sa-err" class="inline-err" role="alert" style="display:none;"></p>
 <button class="cta" type="button" onclick="scoreAssessment()">Score my pitch</button>
 <section id="results" aria-live="polite">
-  <p class="rep-print-head">Add Then Multiply · Pitching self-assessment report · addthenmultiply.com</p>
+  <p class="rep-print-head">Add Then Multiply · Pitching self-assessment report · <span class="rep-print-date"></span> · addthenmultiply.com</p>
   <span class="kicker">Your report</span>
   <div class="scorebox rep" id="rep-score">
     <span class="kicker">1 · Your score</span>
@@ -359,7 +359,10 @@ function buildSummary(r){
   lines.push("Next step: " + r.plan.name + ". Scope and fee are agreed on the Readiness Call.");
   return lines.join("\n");
 }
-function printReport(){ try { window.print(); } catch(e) {} }
+// Print the report; the date in the print header is set at print time (button or Ctrl+P).
+function stampPrintDate(){ try { var d = new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}); document.querySelectorAll('.rep-print-date').forEach(function(e){ e.textContent = d; }); } catch(e) {} }
+function printReport(){ stampPrintDate(); try { window.print(); } catch(e) {} }
+window.addEventListener('beforeprint', stampPrintDate);
 function copySummary(){
   const msg = document.getElementById("copyMsg");
   if(!lastReport){ msg.textContent = "Score the assessment first."; return; }
