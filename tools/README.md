@@ -9,6 +9,9 @@ Small scripts that keep the single-file pages consistent and prove they work. No
 | `report-test.js` | Runs every scoring harness (`runTests()`) in headless Chromium, then drives each assessment end to end: answers, score, band, written report, copy summary, print stylesheet, booking parameters. Screenshots and a PDF land in `tools/out/`. | `PW=$(npm root -g)/playwright node tools/report-test.js` |
 | `qa-test.js` | Pre-launch pass: mobile at 360px and 375px, keyboard, validation messages, recovery when the database is unreachable, redirects, booking hand-off, consent and privacy presence. Results in `tools/out/qa-results.json`. | `PW=$(npm root -g)/playwright node tools/qa-test.js` |
 | `keyboard-gate-test.js` | Keyboard-only completion of the four gated instruments, timing the report after Enter. | `PW=$(npm root -g)/playwright node tools/keyboard-gate-test.js` |
+| `front-door-check.js` | The pre-event check: starts on the homepage, clicks each door and runs every assessment tick by tick (validation, scoring self-test, score and band, full report, booking hand-off, print button and A4 print layout, opt-in, consent, database outage, phone size, script errors). Saves a printed PDF of each report to `tools/out/pdf/`. | `PW=$(npm root -g)/playwright node tools/front-door-check.js` |
+
+None of these scripts touch the client's live Supabase project: every database and email call is answered or blocked inside the browser. Only the two live tests below do, on purpose.
 
 Playwright is expected as a global install with Chromium available; set `PW` to its module path. Nothing here runs in the browser of a visitor and nothing is deployed.
 

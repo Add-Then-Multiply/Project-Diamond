@@ -6,6 +6,8 @@ require('fs').mkdirSync(SHOT, { recursive: true });
 (async () => {
   const browser = await chromium.launch();
   const context = await browser.newContext({ viewport: { width: 1200, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });
+  // Never touch the client's live systems: every Supabase call (lead insert, send-report) is answered here.
+  await context.route(/supabase\.co/, r => r.fulfill({ status: r.request().method() === 'POST' ? 201 : 200, contentType: 'application/json', body: r.request().url().includes('send-report') ? '{"ok":true}' : '[]' }));
   for (const p of ['pitch.html','commercial-acceleration.html','finance-advisory.html','founder-dependence.html','personal-exit-readiness.html','diagnostic.html','investor-ready.html','transaction-readiness.html','index.html']) {
     const page = await context.newPage();
     const errs = [], logs = [];

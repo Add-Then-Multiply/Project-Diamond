@@ -13,7 +13,7 @@ const url = p => 'file://' + path.join(ROOT, p);
   // 1. Mobile: no horizontal overflow at 360 and 375, tap targets, input font size, viewport meta.
   for (const p of PAGES) {
     for (const w of [360, 375]) {
-      const ctx = await browser.newContext({ viewport: { width: w, height: 740 }, isMobile: true, hasTouch: true });
+      const ctx = await browser.newContext({ viewport: { width: w, height: 740 }, isMobile: true, hasTouch: true }); await ctx.route(/supabase\.co/, r => r.abort()); /* never touch the client's live project */
       const page = await ctx.newPage(); await page.goto(url(p)); await page.waitForTimeout(150);
       const r = await page.evaluate(() => {
         const overflow = document.documentElement.scrollWidth - document.documentElement.clientWidth;
@@ -32,7 +32,7 @@ const url = p => 'file://' + path.join(ROOT, p);
   }
   // 2. Keyboard: index hero answers and doors reachable by Tab, activate with Enter/Space, visible focus ring; gated form completable by keyboard.
   {
-    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } });
+    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } }); await ctx.route(/supabase\.co/, r => r.abort()); /* never touch the client's live project */
     const page = await ctx.newPage(); await page.goto(url('index.html')); await page.waitForTimeout(200);
     const seq = [];
     for (let i = 0; i < 14; i++) {
@@ -72,7 +72,7 @@ const url = p => 'file://' + path.join(ROOT, p);
   }
   // 3. Validation and recovery on the gated pages and the self-assessments.
   for (const p of GATED) {
-    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } });
+    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } }); await ctx.route(/supabase\.co/, r => r.abort()); /* never touch the client's live project */
     const page = await ctx.newPage(); const errs = []; page.on('pageerror', e => errs.push(e.message));
     await page.goto(url(p)); await page.waitForTimeout(200);
     const submitSel = p === 'investor-ready.html' ? '#submit-btn' : 'button.cta';
@@ -99,7 +99,7 @@ const url = p => 'file://' + path.join(ROOT, p);
     await ctx.close();
   }
   for (const p of SELF) {
-    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } });
+    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } }); await ctx.route(/supabase\.co/, r => r.abort()); /* never touch the client's live project */
     const page = await ctx.newPage(); await page.goto(url(p)); await page.waitForTimeout(200);
     await page.click('button.cta'); await page.waitForTimeout(150);
     const msg = await page.evaluate(() => { const e = document.getElementById('sa-err'); return getComputedStyle(e).display !== 'none' ? e.textContent.trim().slice(0, 80) : 'NO MESSAGE'; });
@@ -111,7 +111,7 @@ const url = p => 'file://' + path.join(ROOT, p);
   }
   // 4. Redirects and hand-off.
   {
-    const ctx = await browser.newContext(); const page = await ctx.newPage();
+    const ctx = await browser.newContext(); await ctx.route(/supabase\.co/, r => r.abort()); /* never touch the client's live project */ const page = await ctx.newPage();
     for (const r of ['sourcing.html', 'exit-ready.html']) { await page.goto(url(r)); await page.waitForTimeout(500); out.redirects.push({ from: r, landsOn: page.url().split('/').pop(), noindex: true }); }
     for (const p of ['index.html','pitch.html','investors.html','funding.html']) {
       await page.goto(url(p) + '?utm_source=LinkedIn_Paid'); await page.waitForTimeout(200);
