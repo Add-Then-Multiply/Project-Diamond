@@ -64,6 +64,23 @@ a.jump:hover{background:#A61D17;color:#fff;}
 @media(prefers-reduced-motion:reduce){.rise{animation:none}}
 /* 16px minimum on form fields: stops iOS Safari zooming the page when a field is focused. */
 input[type=text],input[type=email],select,textarea{font-size:1rem;}
+/* Printing the report: the button under the score prints only the report, on A4, without the
+   questions, the opt-in form, the navigation or the booking buttons. */
+.rep-print-head,.rep-print-foot{display:none;}
+.print-btn{display:inline-block;margin:0 0 1.2rem;padding:0.6rem 1.1rem;border:1px solid var(--accent,#C8231C);border-radius:4px;background:#fff;color:var(--accent,#C8231C);font-weight:600;font-size:0.9rem;cursor:pointer;}
+.print-btn:hover{background:#FEF2F2;}
+@media print{
+  @page{size:A4;margin:14mm;}
+  html,body{background:#fff!important;color:#000;}
+  header,footer,nav,main>*:not(#results),#leadgate,button,.print-btn,.no-print,#bookBtn,#booking-cta,.cta-section,#deepLink,#ctaLine,a.nav-cta{display:none!important;}
+  main{max-width:none!important;padding:0!important;margin:0!important;}
+  #results{display:block!important;border-top:none!important;margin-top:0!important;padding-top:0!important;}
+  .rep-print-head{display:block!important;font-size:9pt;color:#475569;border-bottom:1px solid #999;padding-bottom:0.3rem;margin-bottom:0.8rem;}
+  .rep-print-foot{display:block!important;font-size:8pt;color:#475569;border-top:1px solid #999;padding-top:0.3rem;margin-top:1rem;}
+  .scorebox,.gap-summary,.score-display,.lever,.gap-item,.row{break-inside:avoid;page-break-inside:avoid;}
+  h2,h3{break-after:avoid;page-break-after:avoid;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important;animation:none!important;}
+}
 </style>
 </head>
 <body>
@@ -96,6 +113,7 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
   <button class="cta" id="scoreBtn" style="display:none;" onclick="scoreDiagnostic()">Calculate my Readiness Score</button>
 
   <section id="results" aria-live="polite">
+    <p class="rep-print-head">Add Then Multiply · Ethical Acquisitions Scorecard report · <span class="rep-print-date"></span> · addthenmultiply.com</p>
     <span class="kicker">Your results</span>
     <div class="scorebox">
       <span class="big" id="totalScore">–</span><span style="color:var(--slate)">%</span><span class="band" id="bandLabel"></span>
@@ -120,12 +138,14 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
       </div>
     </section>
     <div id="fullReport" style="display:none;">
+      <button type="button" class="print-btn" onclick="printReport()">Print or save as PDF</button>
       <div class="scorebox" id="themeBars"></div>
       <div class="scorebox"><h2 style="margin-top:0;font-size:1.05rem;">Your immediate priorities</h2><ul class="gaps" id="gapList"></ul>
         <div class="svcmatch" id="svcMatch"></div>
         <p style="margin-top:1.2rem;" id="ctaLine"></p>
         <p style="margin-top:0.8rem;"><a id="bookBtn" href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" target="_blank" rel="noopener" style="display:inline-block;background:var(--navy);color:#fff;padding:0.75rem 1.5rem;border-radius:4px;font-weight:600;">Book your free 30-minute ATM call →</a></p>
       </div>
+      <p class="rep-print-foot">This report is educational and indicates business readiness only. It is not financial or investment advice and not a financial promotion. Add Then Multiply Limited is not authorised or regulated by the Financial Conduct Authority. Book a free Readiness Call at addthenmultiply.com.</p>
     </div>
   </section>
   <p class="note">Your answers are scored in your browser. The result is a framework for thinking through an acquisition, built from your own answers; it is not an independent ethical grade. Your full report is free and shown on screen with no sign-up. If you ask us to send you a copy, you give us your name, work email and company and tick the consent box; only then are your answers, your score and those details stored securely by Add Then Multiply so we can follow up, and they are never sold or shared with third parties. If you then book a Readiness Call, your score and band travel with the booking link. This scorecard indicates readiness only, it is not financial or investment advice, and any introduction to investors is made by David as an officer of the client company, never by the platform. Methodology: FACE (Fund, Acquire, Consolidate, Exit) from <em>Add Then Multiply</em> by David B Horne.</p>
@@ -363,16 +383,17 @@ async function submitLead(){
   const gateBtn = document.querySelector("#leadgate button"), gateLabel = gateBtn ? gateBtn.textContent : "";
   if(gateBtn){ gateBtn.disabled = true; gateBtn.textContent = "Sending…"; }
   const leadId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : null;
+  let saved = false;
   if(sb){
       /* Save the lead, but never make the founder wait on it: the report renders after
          six seconds even if the database has not answered, and on any failure. */
-      try { await Promise.race([sb.from("leads").insert(Object.assign(buildLeadPayload(pending.answers, pending.themeScores, pending.total, pending.band, pending.role, contact), {id: leadId, report_requested: true, report_html: reportHtml()})), new Promise(function(r){ setTimeout(r, 6000); })]); }
+      try { const res = await Promise.race([sb.from("leads").insert(Object.assign(buildLeadPayload(pending.answers, pending.themeScores, pending.total, pending.band, pending.role, contact), {id: leadId, report_requested: true, report_html: reportHtml()})), new Promise(function(r){ setTimeout(function(){ r("timeout"); }, 6000); })]); saved = !!res && res !== "timeout" && !res.error; }
       catch(e) { /* never block the founder's results on a network failure */ }
   }
-  try { if(leadId) await Promise.race([sb.functions.invoke("send-report", { body: { lead_id: leadId } }), new Promise(function(r){ setTimeout(r, 6000); })]); }
+  try { if(leadId && saved) await Promise.race([sb.functions.invoke("send-report", { body: { lead_id: leadId } }), new Promise(function(r){ setTimeout(r, 6000); })]); }
   catch(e) { /* the copy is sent by the server; a slow send never blocks the founder */ }
   if(gateBtn){ gateBtn.disabled = false; gateBtn.textContent = gateLabel; }
-  showSent(contact.email);
+  if(saved) showSent(contact.email); else showNotSaved();
 }
 
 
@@ -412,6 +433,12 @@ function reportHtml(){
   copy.querySelectorAll("a[href]").forEach(a => a.setAttribute("href", a.href));   // page-relative links would break in an email
   copy.querySelectorAll('a[href*="leadconnectorhq.com"]').forEach(a => { const p = a.closest("p"); (p && p.textContent.trim() === a.textContent.trim() ? p : a).remove(); });
   return copy.innerHTML.slice(0, 120000);
+}
+/* The copy could not be saved (no connection, or the database did not answer in time).
+   Say so plainly, keep the form so the founder can try again, and point to printing. */
+function showNotSaved(){
+  const err = document.getElementById("ld-error");
+  if(err){ err.textContent = "We could not send your copy just now, possibly the connection. Your report is still on screen: press Print or save as PDF to keep it, or try again in a minute."; err.style.display = "block"; }
 }
 function showSent(email){
   const gate = document.getElementById("leadgate");
@@ -521,6 +548,11 @@ function runTests(){
   return passed === results.length;
 }
 window.runTests = runTests;
+
+// Print the report (A4, report only; see the @media print rules). The date stamp is set at print time.
+function stampPrintDate(){ try { var d=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}); document.querySelectorAll('.rep-print-date').forEach(function(e){ e.textContent=d; }); } catch(e) {} }
+function printReport(){ stampPrintDate(); try { window.print(); } catch(e) {} }
+window.addEventListener('beforeprint', stampPrintDate);
 </script>
 </body>
 </html>
