@@ -111,6 +111,8 @@ a.jump{display:inline-block;background:var(--accent);color:#fff;padding:0.85rem 
 a.jump:hover{background:#A61D17;color:#fff;}
 .jumpnote{display:block;font-size:0.82rem;color:var(--slate);margin-top:0.5rem;}
 @media(prefers-reduced-motion:reduce){.rise{animation:none}}
+.rep-print-mark{display:block;background:#2B2A29;color:#FFFFFF;font:700 13pt/1.2 Georgia,serif;letter-spacing:0.5px;padding:7px 10px;border-bottom:4px solid #E4342D;margin-bottom:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.rep-print-mark b{color:#F38E00;font-weight:700;}
 </style>
 </head>
 <body>
@@ -182,7 +184,7 @@ a.jump:hover{background:#A61D17;color:#fff;}
 <p id="sa-err" class="inline-err" role="alert" style="display:none;"></p>
 <button class="cta" type="button" onclick="scoreAssessment()">Score my pitch</button>
 <section id="results" aria-live="polite">
-  <p class="rep-print-head">Add Then Multiply · Pitching self-assessment report · <span class="rep-print-date"></span> · addthenmultiply.com</p>
+  <p class="rep-print-head"><span class="rep-print-mark">ADD THEN <b>MULTIPLY</b></span>Add Then Multiply · Pitching self-assessment report · <span class="rep-print-date"></span> · addthenmultiply.com</p>
   <span class="kicker">Your report</span>
   <div class="scorebox rep" id="rep-score">
     <span class="kicker">1 · Your score</span>

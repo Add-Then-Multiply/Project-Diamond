@@ -87,6 +87,8 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
   h2,h3{break-after:avoid;page-break-after:avoid;}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important;animation:none!important;}
 }
+.rep-print-mark{display:block;background:#2B2A29;color:#FFFFFF;font:700 13pt/1.2 Georgia,serif;letter-spacing:0.5px;padding:7px 10px;border-bottom:4px solid #E4342D;margin-bottom:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.rep-print-mark b{color:#F38E00;font-weight:700;}
 </style>
 </head>
 <body>
@@ -110,7 +112,7 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
   <p id="diag-err" class="inline-err" role="alert" style="display:none;"></p>
   <button class="cta" onclick="scoreDiagnostic()">Calculate my Multiplier Score</button>
   <section id="results" aria-live="polite">
-    <p class="rep-print-head">Add Then Multiply · Multiplier Diagnostic report · <span class="rep-print-date"></span> · addthenmultiply.com</p>
+    <p class="rep-print-head"><span class="rep-print-mark">ADD THEN <b>MULTIPLY</b></span>Add Then Multiply · Multiplier Diagnostic report · <span class="rep-print-date"></span> · addthenmultiply.com</p>
     <span class="kicker">Your results</span>
     <div class="scorebox">
       <span class="big" id="totalScore">–</span><span style="color:var(--slate)">%</span><span class="band" id="bandLabel"></span>
