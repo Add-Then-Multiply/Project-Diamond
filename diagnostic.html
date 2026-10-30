@@ -121,6 +121,15 @@ a.jump:hover{background:#A61D17;}
 .bookstep button.bs-go:hover{background:#D97F00;}
 .bookstep a.bs-skip{color:#2B2A29;font-weight:600;font-size:0.92rem;}
 .bookstep .bs-status{font-size:0.92rem;color:#15803D;font-weight:600;margin-top:0.8rem;display:none;}
+.q-pulse{outline:3px solid #C8231C;outline-offset:6px;border-radius:8px;transition:outline-color 0.6s;}
+a.next-btn{display:inline-block;background:#fff;color:#C8231C;border:2px solid #C8231C;border-radius:6px;padding:0.7rem 1.1rem;font-weight:700;text-decoration:none;margin:0.4rem 0.5rem 0 0;}
+a.next-btn:hover{background:#FEF2F2;}
+.also-take{margin-top:1rem;}
+.also-take .also-lead{display:block;font-size:0.85rem;color:#475569;font-weight:600;margin-bottom:0.2rem;}
+.next-panel{background:#fff;border:2px solid #C8231C;border-radius:8px;padding:1.2rem;margin:0 0 1.4rem;}
+.next-panel h2{font-family:Georgia,serif;font-size:1.25rem;color:#2B2A29;margin:0 0 0.4rem;}
+.next-panel p{font-size:0.92rem;color:#334155;margin:0 0 0.6rem;}
+@media print{.next-panel,.also-take{display:none!important;}}
 /* Book a call: brand orange with charcoal text (white on this orange fails contrast) */
 p.optin-book{margin:0 0 1.4rem;}
 a.book-top,a.cta:not(.nav-cta),a#booking-cta,a#bookBtn,a.book-cta{background:#F38E00!important;color:#2B2A29!important;border-color:#F38E00!important;font-weight:700;}
@@ -146,6 +155,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
   <h1 class="rise d1">Is your business ready to multiply?</h1>
   <p class="lede rise d2">Growing organically is slow. Businesses that fund, acquire, consolidate and exit multiply instead. This diagnostic measures your readiness for exponential growth across six dimensions, and shows you exactly where to start. Answer each question honestly, on a scale from "not at all" to "completely".</p>
 <p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#diag">Do the assessment</a><span class="jumpnote">Twenty questions, about three minutes. Free. You get your score and your weak points on screen straight away. Want help with them? Book a free 30-minute call and we take it from there.</span></p>
+<p class="also-take rise d3"><span class="also-lead">Thinking about a sale? Two more free assessments go deeper:</span><a class="next-btn" href="transaction-readiness.html">Transaction Readiness Assessment: 24 metrics</a><a class="next-btn" href="personal-exit-readiness.html">Personal Exit Readiness: you, not the business</a></p>
   <p class="rise d3" style="max-width:66ch;color:#334155;font-size:0.92rem;margin-top:0.8rem;"><b style="color:var(--navy);">Arrived here from Exit Ready, or not sure where to start?</b> Either way this is the right first step. An exit is decided by the whole business, so we read all six dimensions before going deeper, and your answers on funding and exit carry extra weight in the score. If the result points to a sale, your report offers the <a href="transaction-readiness.html">Transaction Readiness Assessment</a>: 24 metrics at the depth a buyer's advisers would test. And because an exit is a life event, there is a separate ten-minute <a href="personal-exit-readiness.html">Personal Exit Readiness</a> self-assessment for you rather than the business.</p>
   <form id="diag"></form>
   <p id="diag-err" class="inline-err" role="alert" style="display:none;"></p>
@@ -573,6 +583,14 @@ function offerReport(){
     b.innerHTML = '<a id="book-top" class="book-top" target="_blank" rel="noopener">Book a call</a>';
     gate.after(b);
     const step = document.getElementById("bookstep"); if(step) b.after(step);
+    if(!document.getElementById("next-panel")){
+      const q = location.search || "";
+      const n = document.createElement("div"); n.id = "next-panel"; n.className = "next-panel";
+      n.innerHTML = '<h2>Your next assessment</h2><p>Your Multiplier Diagnostic is done. Go straight on to the next one: it picks up where this left off.</p>'
+        + '<a class="jump" href="transaction-readiness.html' + q + '">Next: Transaction Readiness Assessment</a> '
+        + '<a class="next-btn" href="personal-exit-readiness.html' + q + '">Personal Exit Readiness</a>';
+      (step || b).after(n);
+    }
     const a = b.firstChild; a.href = (src && src.href) || BOOKING_URL;
     a.addEventListener("click", function(){ const s2 = document.querySelector("#booking-cta, #bookBtn, #results a.cta, #fullReport a.cta"); if(s2 && s2.href) a.href = s2.href; });
   }
@@ -783,6 +801,23 @@ window.runTests = runTests;
 function stampPrintDate(){ try { var d=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}); document.querySelectorAll('.rep-print-date').forEach(function(e){ e.textContent=d; }); } catch(e) {} }
 function printReport(){ stampPrintDate(); try { window.print(); } catch(e) {} }
 window.addEventListener('beforeprint', stampPrintDate);
+</script>
+
+<script>
+/* "Do the assessment": bring the first question to the top of the screen and
+   highlight it, so the button visibly does something even when the questions
+   are already in view (Female Founders Day feedback). */
+document.querySelectorAll("a.jump[href^='#']").forEach(function(a){
+  a.addEventListener("click", function(e){
+    const target = document.querySelector(a.getAttribute("href")); if(!target) return;
+    e.preventDefault();
+    const radios = Array.prototype.slice.call(document.querySelectorAll("input[type=radio]"));
+    const first = radios.find(function(r){ return target.contains(r) || (target.compareDocumentPosition(r) & Node.DOCUMENT_POSITION_FOLLOWING); });
+    let box = first && (first.closest(".question-group, fieldset, .rolegrid, .metric, .stmt") || (first.closest("label") || first).parentElement);
+    (box || target).scrollIntoView({ behavior: "smooth", block: "start" });
+    if(box){ box.classList.add("q-pulse"); setTimeout(function(){ box.classList.remove("q-pulse"); }, 2200); }
+  });
+});
 </script>
 </body>
 </html>

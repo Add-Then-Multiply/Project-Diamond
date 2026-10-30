@@ -97,6 +97,8 @@ footer{border-top:1px solid var(--line);color:var(--slate);font-size:0.78rem;tex
 .doors.picked .door{opacity:0.45;}
 .doors.picked .door.on{opacity:1;border-color:var(--brand);transform:translateY(-2px);}
 .doors.picked .door.on .start{display:inline-block;}
+.door .start.next{background:#fff;color:var(--accent);border:1.5px solid var(--accent);}
+.door .start.also{background:#fff;color:#475569;border:1px solid #CBD5E1;}
 .doors.picked .door.on .tag.free{display:none;}
 section{margin-top:4.5rem;}
 @media(prefers-reduced-motion:reduce){.rise,.mark-x,.mark-plus{animation:none}}
@@ -246,6 +248,14 @@ section{margin-top:4.5rem;}
       document.querySelectorAll(".want").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-want") === current)); });
       doors.classList.toggle("picked", !!current);
       document.querySelectorAll(".door").forEach(function(d){ d.classList.toggle("on", !!current && (d.getAttribute("data-fits") || "").split(" ").indexOf(current) > -1); });
+      /* One door says Start here; the next one says Next; the rest Also useful (the order used on Female Founders Day). */
+      var order = { raise: ["investor-ready.html", "pitch.html"], buy: ["deal-ready.html", "commercial-acceleration.html"], sell: ["diagnostic.html", "finance-advisory.html"] };
+      document.querySelectorAll(".door").forEach(function(d){
+        var st = d.querySelector(".start"); if(!st) return;
+        var rank = current ? order[current].indexOf(d.getAttribute("href")) : -1;
+        st.textContent = rank === 0 ? "START HERE" : rank === 1 ? "NEXT" : "ALSO USEFUL";
+        st.classList.toggle("next", rank === 1); st.classList.toggle("also", rank < 0);
+      });
       head.textContent = current ? heads[current] : defaultHead;
       intro.textContent = current ? intros[current] : defaultIntro;
       if(current){ document.getElementById("doors").scrollIntoView({ behavior: "smooth", block: "start" }); }
