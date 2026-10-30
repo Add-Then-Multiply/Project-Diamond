@@ -35,6 +35,9 @@ const INSTRUMENT_NAMES: Record<string, string> = {
   investor_ready: "Funding Scorecard",
   transaction_readiness: "Transaction Readiness Assessment",
   ethical_acquisitions: "Ethical Acquisitions Scorecard",
+  pitch: "Pitching self-assessment",
+  commercial_acceleration: "Commercial Acceleration self-assessment",
+  finance_advisory: "Finance Advisory self-assessment",
 };
 
 const PAGE_FOR: Record<string, string> = {
@@ -42,6 +45,9 @@ const PAGE_FOR: Record<string, string> = {
   investor_ready: "investor-ready.html",
   transaction_readiness: "transaction-readiness.html",
   ethical_acquisitions: "ethical-acquisitions.html",
+  pitch: "pitch.html",
+  commercial_acceleration: "commercial-acceleration.html",
+  finance_advisory: "finance-advisory.html",
 };
 
 // The assessment codes David agreed on 20 September (see GHL-DATA-MAP.md).
@@ -50,6 +56,9 @@ const CODE_FOR: Record<string, string> = {
   investor_ready: "IR",
   transaction_readiness: "RD",
   ethical_acquisitions: "EA",
+  pitch: "PI",
+  commercial_acceleration: "CA",
+  finance_advisory: "FA",
 };
 
 function slug(s: unknown): string {
@@ -136,7 +145,7 @@ Deno.serve(async (req) => {
 <p style="font-size:15px;">Hello ${first},</p>
 <p style="font-size:15px;">Here is your ${escape(name)} report: <b>${escape(lead.score_pct)}%</b>, <b>${escape(lead.band)}</b>. A member of our team reads every report before a Readiness Call. Nothing in it is financial or investment advice: it shows how ready the business is, and what to do next is a recommendation we make with you on the call.</p>
 <div style="background:#fff;border:1px solid #E2E8F0;border-radius:6px;padding:18px;font-size:14px;line-height:1.55;">${lead.report_html ?? "<p>Your report is on the page you completed; open the link below to see it again.</p>"}</div>
-<p style="margin-top:20px;"><a href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" style="display:inline-block;background:#2B2A29;color:#fff;padding:12px 20px;border:2px solid #2B2A29;border-radius:4px;text-decoration:none;font-weight:600;margin:0 8px 8px 0;">Book your free Readiness Call</a><a href="${page}" style="display:inline-block;background:#fff;color:#2B2A29;padding:12px 20px;border:2px solid #2B2A29;border-radius:4px;text-decoration:none;font-weight:600;margin:0 0 8px 0;">Retake test</a></p>
+<p style="margin-top:20px;"><a href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" style="display:inline-block;background:#F38E00;color:#2B2A29;padding:12px 20px;border:2px solid #F38E00;border-radius:4px;text-decoration:none;font-weight:700;margin:0 8px 8px 0;">Book your free Readiness Call</a><a href="${page}" style="display:inline-block;background:#fff;color:#2B2A29;padding:12px 20px;border:2px solid #2B2A29;border-radius:4px;text-decoration:none;font-weight:600;margin:0 0 8px 0;">Retake test</a></p>
 <p style="font-size:12px;color:#475569;border-top:1px solid #E2E8F0;padding-top:12px;margin-top:24px;">Add Then Multiply Limited is registered in England and Wales, company number 04623437. It is not authorised or regulated by the Financial Conduct Authority. This email describes our services and is not a financial promotion. You asked for this copy on our website; we will not add you to any list without a separate consent. To have your details deleted, reply to this email.</p>
 </div></body></html>`;
 

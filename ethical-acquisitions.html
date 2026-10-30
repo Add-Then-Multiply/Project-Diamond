@@ -83,6 +83,33 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
 }
 .rep-print-mark{display:block;background:#2B2A29;color:#FFFFFF;font:700 13pt/1.2 Georgia,serif;letter-spacing:0.5px;padding:7px 10px;border-bottom:4px solid #E4342D;margin-bottom:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 .rep-print-mark b{color:#F38E00;font-weight:700;}
+
+/* Send me my report: sits straight under the score (Female Founders Day feedback, October 2026) */
+.optin{background:#fff;border:2px solid #2B2A29;border-radius:8px;padding:1.2rem 1.2rem 1.4rem;margin:1.2rem 0;}
+.optin h2.optin-h{font-family:Georgia,serif;font-size:1.35rem;color:#2B2A29;margin:0 0 0.4rem;}
+.optin p.optin-p{font-size:0.95rem;color:#334155;margin:0 0 1rem;max-width:60ch;}
+.optin .optin-main,.optin .optin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;}
+.optin label{display:block;font-size:0.85rem;color:#475569;font-weight:600;}
+.optin input[type=text],.optin input[type=email],.optin select{display:block;width:100%;padding:0.7rem;border:1px solid #CBD5E1;border-radius:6px;margin-top:0.25rem;font-size:16px;background:#fff;color:#111827;}
+.optin .optin-sub{font-size:0.8rem;color:#475569;margin:1rem 0 0.5rem;font-weight:600;}
+.optin .optin-grid label{font-weight:400;}
+.optin label.optin-consent{display:flex;gap:0.6rem;align-items:flex-start;font-weight:400;font-size:0.88rem;margin-top:1rem;}
+.optin label.optin-consent input{margin-top:0.2rem;width:1.15rem;height:1.15rem;accent-color:#2B2A29;flex:none;}
+.optin .optin-err{display:none;color:#B91C1C;font-size:0.88rem;margin-top:0.6rem;font-weight:600;}
+.optin button.optin-btn{display:block;width:100%;margin-top:1rem;background:#2B2A29;color:#fff;border:0;border-radius:6px;padding:1rem;font-size:1.1rem;font-weight:700;cursor:pointer;font-family:inherit;}
+.optin button.optin-btn:hover{background:#111827;}
+.optin button.optin-btn:disabled{opacity:0.7;cursor:wait;}
+p.optin-again{margin:1.5rem 0;text-align:center;}
+p.optin-again a{display:inline-block;border:2px solid #2B2A29;color:#2B2A29;background:#fff;border-radius:6px;padding:0.75rem 1.4rem;font-weight:700;text-decoration:none;}
+a.jump{display:inline-block;background:#C8231C;color:#fff;padding:0.85rem 1.6rem;border-radius:6px;font-weight:700;margin-top:0.2rem;text-decoration:none;}
+a.jump:hover{background:#A61D17;}
+.jumpnote{display:block;font-size:0.82rem;color:#475569;margin-top:0.5rem;}
+/* Book a call: brand orange with charcoal text (white on this orange fails contrast) */
+p.optin-book{margin:0 0 1.4rem;}
+a.book-top,a.cta:not(.nav-cta),a#booking-cta,a#bookBtn,a.book-cta{background:#F38E00!important;color:#2B2A29!important;border-color:#F38E00!important;font-weight:700;}
+a.book-top{display:block;text-align:center;border-radius:6px;padding:1rem;font-size:1.1rem;text-decoration:none;}
+a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a.book-cta:hover{background:#D97F00!important;}
+@media print{.optin,#leadgate,p.optin-again,p.optin-book,a.jump,.jumpnote{display:none!important;}}
 </style>
 </head>
 <body>
@@ -101,8 +128,9 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
   <span class="kicker rise">Ethical Acquisitions Scorecard · 15 questions · 3 minutes · instant results</span>
   <h1 class="rise d1">Buy or sell a business the right way</h1>
   <p class="lede rise d2">Whether you are preparing to sell the business you built, or acquiring to grow, the difference between a fair deal and a painful one is readiness, financial, structural and ethical. This scorecard measures all three, and shows you where you stand before you sit down at the table.</p>
+<p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#start">Do the assessment</a><span class="jumpnote">Fifteen questions, about three minutes. Free. Your full report appears on screen straight away.</span></p>
 
-  <div class="themehead"><h2>First, which best describes you today?</h2><p>This sets the questions you see, so you only answer the ones that apply to you. It is not scored.</p></div>
+  <div class="themehead" id="start"><h2>First, which best describes you today?</h2><p>This sets the questions you see, so you only answer the ones that apply to you. It is not scored.</p></div>
   <div class="rolegrid">
     <label><input type="radio" name="q0" value="seller"><b>Seller / owner</b>preparing to exit</label>
     <label><input type="radio" name="q0" value="buyer"><b>Buyer / acquirer</b>growing by acquisition</label>
@@ -121,24 +149,19 @@ input[type=text],input[type=email],select,textarea{font-size:1rem;}
       <span class="big" id="totalScore">–</span><span style="color:var(--slate)">%</span><span class="band" id="bandLabel"></span>
       <p id="bandDesc" style="font-size:0.9rem;color:#334155;margin-top:0.6rem;"></p>
     </div>
-    <section id="leadgate" style="display:none;">
-      <div class="scorebox">
-        <h2 style="margin-top:0;font-size:1.15rem;">Keep this report</h2>
-        <p style="font-size:0.9rem;color:#334155;max-width:60ch;">Your full report is above, and it lives only on this screen. Tell us where to send a copy and we will email it to you and prepare your Readiness Call around it. Nothing is stored until you press the button.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin-top:1rem;">
-          <label style="font-size:0.8rem;color:var(--slate);" for="ld-name">First name<input id="ld-name" type="text" style="width:100%;padding:0.55rem;border:1px solid var(--line);border-radius:4px;margin-top:0.2rem;"></label>
-          <label style="font-size:0.8rem;color:var(--slate);" for="ld-email">Work email<input id="ld-email" type="email" style="width:100%;padding:0.55rem;border:1px solid var(--line);border-radius:4px;margin-top:0.2rem;"></label>
-          <label style="font-size:0.8rem;color:var(--slate);" for="ld-company">Company<input id="ld-company" type="text" style="width:100%;padding:0.55rem;border:1px solid var(--line);border-radius:4px;margin-top:0.2rem;"></label>
-          <label style="font-size:0.8rem;color:var(--slate);" for="ld-revenue">Turnover band<select id="ld-revenue" style="width:100%;padding:0.55rem;border:1px solid var(--line);border-radius:4px;margin-top:0.2rem;background:#fff;"><option value="">Select…</option><option>Under £1M</option><option>£1M–£5M</option><option>£5M–£10M</option><option>£10M–£25M</option><option>Over £25M</option></select></label>
-          <label style="font-size:0.8rem;color:var(--slate);" for="ld-timeframe">Timeframe to act<select id="ld-timeframe" style="width:100%;padding:0.55rem;border:1px solid var(--line);border-radius:4px;margin-top:0.2rem;background:#fff;"><option value="">Select…</option><option>0–3 months</option><option>3–6 months</option><option>6–12 months</option><option>Exploring</option></select></label>
-        </div>
-        <label style="display:flex;gap:0.5rem;align-items:flex-start;font-size:0.8rem;color:var(--slate);margin-top:1rem;" for="ld-consent"><input id="ld-consent" type="checkbox" style="margin-top:0.2rem;accent-color:var(--accent);">I agree to Add Then Multiply storing my answers and contacting me about my results.</label>
-        <p id="ld-error" style="display:none;color:var(--bad);font-size:0.82rem;margin-top:0.6rem;" role="alert"></p>
-        <div style="display:flex;gap:1rem;align-items:center;margin-top:1.2rem;flex-wrap:wrap;">
-          <button class="cta" style="margin-top:0;" onclick="submitLead()">Send me my report</button>
-        </div>
-      </div>
-    </section>
+    <section id="leadgate" class="optin" style="display:none;" aria-labelledby="optin-h">
+  <h2 class="optin-h" id="optin-h">Send me my report</h2>
+  <p class="optin-p">Get this report by email, and we will use it to prepare your free Readiness Call. Just your first name and email. Nothing is stored until you press the button.</p>
+  <div class="optin-main">
+    <label for="ld-name">First name<input id="ld-name" type="text" autocomplete="given-name"></label>
+    <label for="ld-email">Email<input id="ld-email" type="email" autocomplete="email" inputmode="email"></label>
+  </div>
+  <p class="optin-sub">Optional, it helps us prepare</p>
+  <div class="optin-grid"><label for="ld-company">Company<input id="ld-company" type="text" autocomplete="organization"></label><label for="ld-revenue">Annual revenue<select id="ld-revenue"><option value="">Select…</option><option>Under £1M</option><option>£1M–£5M</option><option>£5M–£10M</option><option>£10M–£25M</option><option>Over £25M</option></select></label><label for="ld-timeframe">Timeframe<select id="ld-timeframe"><option value="">Select…</option><option>0–3 months</option><option>3–6 months</option><option>6–12 months</option><option>Exploring</option></select></label></div>
+  <label class="optin-consent" for="ld-consent"><input id="ld-consent" type="checkbox">I agree to Add Then Multiply storing my answers and contacting me about my results.</label>
+  <p id="ld-error" class="optin-err" role="alert"></p>
+  <button type="button" class="optin-btn" onclick="submitLead()">Send me my report</button>
+</section>
     <div id="fullReport" style="display:none;">
       <button type="button" class="print-btn" onclick="printReport()">Print or save as PDF</button>
       <div class="scorebox" id="themeBars"></div>
@@ -313,7 +336,7 @@ function buildLeadPayload(answers, themeScores, total, band, role, contact){
     instrument: INSTRUMENT, instrument_version: INSTRUMENT_VERSION,
     score_pct: total, band: band.label, band_tag: "eas:" + bandSlug(band.label),
     theme_scores: themeScores, answers: answers, audience_role: role,
-    first_name: contact.name, email: contact.email, company: contact.company,
+    first_name: contact.name, email: contact.email, company: contact.company || null,
     role_title: role, revenue_band: contact.revenue || null,
     consent: true, source_page: "ethical-acquisitions.html"
   };
@@ -372,8 +395,8 @@ async function submitLead(){
     revenue: document.getElementById("ld-revenue").value
   };
   const err = document.getElementById("ld-error");
-  if(!contact.name || !contact.email || !contact.company){
-    err.textContent = "Please complete your name, email and company."; err.style.display = "block"; return;
+  if(!contact.name || !contact.email){
+    err.textContent = "Please add your first name and email."; err.style.display = "block"; return;
   }
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact.email)){
     err.textContent = "That email address doesn't look right."; err.style.display = "block"; return;
@@ -401,9 +424,23 @@ async function submitLead(){
 
 /* The report is free; these three support the opt-in below it. */
 function offerReport(){
+  /* "Send me my report" sits straight under the score, above the detailed report,
+     with a second button at the end of the report that brings the founder back up to it. */
   const gate = document.getElementById("leadgate"), full = document.getElementById("fullReport");
-  if(gate && full && full.nextElementSibling !== gate) full.after(gate);
+  if(gate && full && full.previousElementSibling !== gate) full.before(gate);
   if(gate) gate.style.display = "block";
+  if(gate && !document.getElementById("book-top")){
+    const src = document.querySelector("#booking-cta, #bookBtn, #results a.cta, #fullReport a.cta");
+    const b = document.createElement("p"); b.className = "optin-book";
+    b.innerHTML = '<a id="book-top" class="book-top" target="_blank" rel="noopener">Book a call</a>';
+    gate.after(b);
+    const a = b.firstChild; a.href = (src && src.href) || BOOKING_URL;
+    a.addEventListener("click", function(){ const s2 = document.querySelector("#booking-cta, #bookBtn, #results a.cta, #fullReport a.cta"); if(s2 && s2.href) a.href = s2.href; });
+  }
+  if(full && !document.getElementById("optin-again")){
+    const p = document.createElement("p"); p.id = "optin-again"; p.className = "optin-again";
+    p.innerHTML = '<a href="#leadgate">Send me my report</a>'; full.after(p);
+  }
 }
 function reportHtml(){
   /* The emailed copy cannot use this page's stylesheet: email programs drop

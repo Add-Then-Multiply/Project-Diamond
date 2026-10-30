@@ -11,9 +11,9 @@ const T = [
   { name: 'Grow by Acquiring', page: 'deal-ready.html', door: true, landing: true, used: 'Acquiring (4): landing page' },
   { name: 'Ethical Acquisitions Scorecard', page: 'ethical-acquisitions.html', scored: true, code: 'EA', used: 'Acquiring (4)' },
   { name: 'Transaction Readiness Assessment', page: 'transaction-readiness.html', scored: true, code: 'RD', used: 'Exit or acquiring, deeper' },
-  { name: 'Commercial Acceleration', page: 'commercial-acceleration.html', door: true, code: 'CA', used: 'Any table' },
-  { name: 'Insourcing: Finance Advisory', page: 'finance-advisory.html', door: true, code: 'FA', used: 'Any table' },
-  { name: 'Pitching', page: 'pitch.html', door: true, code: 'PI', used: 'Raising (14)' },
+  { name: 'Commercial Acceleration', page: 'commercial-acceleration.html', door: true, scored: true, code: 'CA', used: 'Any table' },
+  { name: 'Insourcing: Finance Advisory', page: 'finance-advisory.html', door: true, scored: true, code: 'FA', used: 'Any table' },
+  { name: 'Pitching', page: 'pitch.html', door: true, scored: true, code: 'PI', used: 'Raising (14)' },
   { name: 'Exit Ready (Multiplier Diagnostic)', page: 'diagnostic.html', door: true, scored: true, code: 'MD', used: 'Exit (2), and everyone' },
 ];
 async function answerAll(page) {
@@ -105,7 +105,7 @@ async function scoreBtn(page) { const b = page.locator('#submit-btn:visible, but
         // 11 db down
         dbDown = true; await page.evaluate(() => { document.getElementById('ld-consent').checked = true; submitLead(); }); await page.waitForTimeout(1500);
         const downMsg = await page.evaluate(() => { const e = document.getElementById('ld-error'); return e && getComputedStyle(e).display !== 'none' ? e.textContent.trim() : (document.body.innerText.match(/(couldn.t|could not|try again|unable)[^.]*\./i) || [''])[0]; });
-        const stillReport = await page.evaluate(() => getComputedStyle(document.getElementById('fullReport')).display !== 'none');
+        const stillReport = await page.evaluate(() => getComputedStyle(document.getElementById('fullReport') || document.getElementById('results')).display !== 'none');
         tick('11 Report still works if the database is down', stillReport && downMsg.length > 5, downMsg.slice(0, 90));
         // 9 opt-in saves
         dbDown = false; await page.reload(); await page.waitForTimeout(300); await answerAll(page); await scoreBtn(page);
