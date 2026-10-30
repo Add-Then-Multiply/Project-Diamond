@@ -5,6 +5,9 @@
 // row and mark it sent. Sends through Resend. Never returns the row to the
 // caller, and never sends twice.
 //
+// Any documents the founder attached (founder-uploads/<lead id>/) are listed
+// on the lead (documents) and named in the email.
+//
 // It also creates or updates the founder's GoHighLevel contact (first name,
 // email, assessment code, score and band) so the call team knows who they are.
 // That step is optional: with no GHL_API_KEY set it is skipped, and if it
@@ -123,6 +126,16 @@ Deno.serve(async (req) => {
     if (!lead.consent || !lead.report_requested || !lead.email) {
       return new Response(JSON.stringify({ ok: false, error: "not requested" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
     }
+    // Documents the founder attached (founder-uploads/<lead id>/), if any: recorded
+    // on the lead for the team and named in the email. Recorded even when the
+    // report has already gone (documents added at the booking step). Never stops the report.
+    let docs: { name: string; size: number }[] = [];
+    try {
+      const { data: files } = await admin.storage.from("founder-uploads").list(lead.id, { limit: 10 });
+      docs = (files ?? []).filter((f) => f.name && !f.name.startsWith("."))
+        .map((f) => ({ name: f.name, size: Number((f.metadata as Record<string, unknown> | null)?.size ?? 0) }));
+      if (docs.length) await admin.from("leads").update({ documents: docs }).eq("id", lead.id);
+    } catch (_e) { /* the report still goes out */ }
     if (lead.report_sent_at) return new Response(JSON.stringify({ ok: true, already: true }), { headers: { ...cors, "Content-Type": "application/json" } });
 
     // Hand the founder to GoHighLevel first; a failure here never stops the report.
@@ -135,6 +148,10 @@ Deno.serve(async (req) => {
       await admin.from("leads").update({ ghl_error: String(e).slice(0, 500) }).eq("id", lead.id);
     }
 
+    const docLine = docs.length
+      ? `<p style="font-size:15px;">You also sent us ${docs.length === 1 ? "one document" : docs.length + " documents"}: ${docs.map((d) => escape(d.name.replace(/^\d+-/, ""))).join(", ")}. They are stored privately and only our team can open them; we read them before your Readiness Call.</p>`
+      : "";
+
     const name = INSTRUMENT_NAMES[lead.instrument] ?? "assessment";
     const site = (Deno.env.get("SITE_URL") ?? "https://addthenmultiply.github.io/Project-Diamond").replace(/\/$/, "");
     const page = `${site}/${PAGE_FOR[lead.instrument] ?? "index.html"}`;
@@ -144,6 +161,7 @@ Deno.serve(async (req) => {
 <div style="max-width:680px;margin:0 auto;padding:24px;">
 <p style="font-size:15px;">Hello ${first},</p>
 <p style="font-size:15px;">Here is your ${escape(name)} report: <b>${escape(lead.score_pct)}%</b>, <b>${escape(lead.band)}</b>. A member of our team reads every report before a Readiness Call. Nothing in it is financial or investment advice: it shows how ready the business is, and what to do next is a recommendation we make with you on the call.</p>
+${docLine}
 <div style="background:#fff;border:1px solid #E2E8F0;border-radius:6px;padding:18px;font-size:14px;line-height:1.55;">${lead.report_html ?? "<p>Your report is on the page you completed; open the link below to see it again.</p>"}</div>
 <p style="margin-top:20px;"><a href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" style="display:inline-block;background:#F38E00;color:#2B2A29;padding:12px 20px;border:2px solid #F38E00;border-radius:4px;text-decoration:none;font-weight:700;margin:0 8px 8px 0;">Book your free Readiness Call</a><a href="${page}" style="display:inline-block;background:#fff;color:#2B2A29;padding:12px 20px;border:2px solid #2B2A29;border-radius:4px;text-decoration:none;font-weight:600;margin:0 0 8px 0;">Retake test</a></p>
 <p style="font-size:12px;color:#475569;border-top:1px solid #E2E8F0;padding-top:12px;margin-top:24px;">Add Then Multiply Limited is registered in England and Wales, company number 04623437. It is not authorised or regulated by the Financial Conduct Authority. This email describes our services and is not a financial promotion. You asked for this copy on our website; we will not add you to any list without a separate consent. To have your details deleted, reply to this email.</p>

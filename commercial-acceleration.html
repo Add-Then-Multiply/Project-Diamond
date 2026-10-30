@@ -132,6 +132,17 @@ p.optin-again a{display:inline-block;border:2px solid #2B2A29;color:#2B2A29;back
 a.jump{display:inline-block;background:#C8231C;color:#fff;padding:0.85rem 1.6rem;border-radius:6px;font-weight:700;margin-top:0.2rem;text-decoration:none;}
 a.jump:hover{background:#A61D17;}
 .jumpnote{display:block;font-size:0.82rem;color:#475569;margin-top:0.5rem;}
+.optin .optin-docs{margin-top:1rem;padding:0.9rem;border:1px dashed #94A3B8;border-radius:6px;background:#F8FAFC;}
+.optin .optin-docs input[type=file]{display:block;width:100%;margin-top:0.4rem;font-size:16px;}
+.optin ul.optin-list{margin:0.4rem 0 0 1.1rem;padding:0;font-size:0.85rem;color:#334155;}
+.optin ul.optin-list li{margin:0.15rem 0;}
+.optin p.optin-hint{font-size:0.82rem;color:#475569;margin:0.5rem 0 0;font-weight:400;}
+.optin.bookstep{border-color:#F38E00;}
+.bookstep .bs-actions{display:flex;flex-wrap:wrap;gap:0.8rem;align-items:center;margin-top:1rem;}
+.bookstep button.bs-go{flex:1 1 220px;background:#F38E00;color:#2B2A29;border:0;border-radius:6px;padding:1rem;font-size:1.1rem;font-weight:700;cursor:pointer;font-family:inherit;}
+.bookstep button.bs-go:hover{background:#D97F00;}
+.bookstep a.bs-skip{color:#2B2A29;font-weight:600;font-size:0.92rem;}
+.bookstep .bs-status{font-size:0.92rem;color:#15803D;font-weight:600;margin-top:0.8rem;display:none;}
 /* Book a call: brand orange with charcoal text (white on this orange fails contrast) */
 p.optin-book{margin:0 0 1.4rem;}
 a.book-top,a.cta:not(.nav-cta),a#booking-cta,a#bookBtn,a.book-cta{background:#F38E00!important;color:#2B2A29!important;border-color:#F38E00!important;font-weight:700;}
@@ -154,7 +165,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
 <span class="kicker rise">Commercial Acceleration · framed for FACE · feeds Acquire, Consolidate and Exit</span>
 <h1 class="rise d1">Growth you can show, not just describe</h1>
 <p class="lede rise d2">Every conversation with an investor, a lender or a buyer comes back to the same question: where does the next pound of revenue come from, and how sure are you? Commercial Acceleration builds the answer. A proposition that is clear, pricing that holds, a pipeline you can forecast, and a sales process that runs without the founder in every deal.</p>
-<p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#assess">Do the assessment</a><span class="jumpnote">Eight statements, about ten minutes. Free. It tells you where you actually need help, and who should take the call.</span></p>
+<p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#assess">Do the assessment</a><span class="jumpnote">Eight statements, about ten minutes. Free. You get your score and your weak points on screen straight away. Want help with them? Book a free 30-minute call and we take it from there.</span></p>
 
 <p class="body" style="font-size:0.9rem;">Not sure whether the gap is the engine or you? The free <a href="founder-dependence.html">Founder Dependence</a> self-assessment tells you which dependence to remove first.</p>
 <h2>Who this is for</h2>
@@ -214,6 +225,19 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
 <section id="results" aria-live="polite">
   <p class="rep-print-head"><span class="rep-print-mark">ADD THEN <b>MULTIPLY</b></span>Add Then Multiply · Commercial Acceleration self-assessment report · <span class="rep-print-date"></span> · addthenmultiply.com</p>
   <span class="kicker">Your report</span>
+  <section id="bookstep" class="optin bookstep" style="display:none;" aria-labelledby="bs-h">
+  <h2 class="optin-h" id="bs-h">Before your call</h2>
+  <p class="optin-p">Your free 30-minute call starts from where you are. Press the button and we keep a copy of your scan, so the team can read your score and your weak points before you talk. If you have any of the documents below, attach them too: rough drafts are fine, and none of them is required.</p>
+  <div class="optin-main">
+    <label for="bs-name">First name<input id="bs-name" type="text" autocomplete="given-name"></label>
+    <label for="bs-email">Email<input id="bs-email" type="email" autocomplete="email" inputmode="email"></label>
+  </div>
+  <div class="optin-docs"><p class="optin-sub" style="margin-top:0;">What we need for this review, if you have it</p><ul class="optin-list"><li>Sales pipeline with stages, values and conversion</li><li>Revenue by customer (top 1 and top 5)</li><li>Retention and churn: who stays, who leaves</li><li>Price list and discounting record</li><li>Your business case</li></ul><label for="ld-files" style="margin-top:0.7rem;">Attach documents (optional)<input id="ld-files" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv"></label><p class="optin-hint">Up to five files, 20MB each: PDF, Word, Excel, PowerPoint or CSV. They go to a private folder that only our team can open.</p></div>
+  <label class="optin-consent" for="bs-consent"><input id="bs-consent" type="checkbox">I agree to Add Then Multiply storing my answers and documents and contacting me about my results.</label>
+  <p id="bs-error" class="optin-err" role="alert"></p>
+  <div class="bs-actions"><button type="button" class="bs-go" id="bs-go" onclick="continueToBooking()">Continue to booking</button><a class="bs-skip" id="bs-skip" target="_blank" rel="noopener" href="#">Skip, just book</a></div>
+  <p class="bs-status" id="bs-status" role="status"></p>
+</section>
   <section id="leadgate" class="optin" style="display:none;" aria-labelledby="optin-h">
   <h2 class="optin-h" id="optin-h">Send me my report</h2>
   <p class="optin-p">Get this report by email, and we will use it to prepare your free Readiness Call. Just your first name and email. Nothing is stored until you press the button.</p>
@@ -478,6 +502,7 @@ function buildLeadPayload(contact){
   };
 }
 function offerReport(){
+  resetForNewScore();
   const gate = document.getElementById("leadgate"), anchor = document.getElementById("bandDesc"), res = document.getElementById("results");
   if(gate && anchor && anchor.nextElementSibling !== gate) anchor.after(gate);
   if(gate) gate.style.display = "block";
@@ -486,6 +511,7 @@ function offerReport(){
     const b = document.createElement("p"); b.className = "optin-book";
     b.innerHTML = '<a id="book-top" class="book-top" target="_blank" rel="noopener">Book a call</a>';
     gate.after(b);
+    const step = document.getElementById("bookstep"); if(step) b.after(step);
     const a = b.firstChild; a.href = (src && src.href) || BOOKING_URL;
     a.addEventListener("click", function(){ const s2 = document.querySelector("#booking-cta, #bookBtn, #results a.cta, #fullReport a.cta"); if(s2 && s2.href) a.href = s2.href; });
   }
@@ -495,6 +521,126 @@ function offerReport(){
     const foot = res.querySelector(".rep-print-foot"); if(foot) foot.before(p); else res.appendChild(p);
   }
 }
+
+/* Documents: optional, up to five, sent with "Send me my report" to a private
+   folder (founder-uploads/<lead id>/) that only the ATM team can open. */
+const DOC_MIME = { pdf: "application/pdf", doc: "application/msword",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  xls: "application/vnd.ms-excel", xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ppt: "application/vnd.ms-powerpoint", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation", csv: "text/csv" };
+function docFiles(){ const f = document.getElementById("ld-files"); return f && f.files ? Array.prototype.slice.call(f.files) : []; }
+function docExt(name){ const m = /\.([a-z0-9]+)$/i.exec(name); return m ? m[1].toLowerCase() : ""; }
+function checkDocs(){
+  const files = docFiles();
+  if(files.length > 5) return "Please attach up to five documents.";
+  for(let i = 0; i < files.length; i++){
+    const x = files[i];
+    if(!DOC_MIME[docExt(x.name)]) return x.name + " is not a type we accept: please use PDF, Word, Excel, PowerPoint or CSV.";
+    if(x.size > 20 * 1024 * 1024) return x.name + " is over 20MB: please bring it to your Readiness Call instead.";
+  }
+  return "";
+}
+async function uploadDocs(leadId){
+  const files = docFiles(); let sent = 0;
+  for(let i = 0; i < files.length; i++){
+    const x = files[i], safe = (i + 1) + "-" + x.name.replace(/[^A-Za-z0-9._-]+/g, "-").slice(-100);
+    try {
+      const r = await Promise.race([sb.storage.from("founder-uploads").upload(leadId + "/" + safe, x, { upsert: false, contentType: DOC_MIME[docExt(x.name)] }),
+        new Promise(function(res){ setTimeout(function(){ res({ error: "timeout" }); }, 60000); })]);
+      if(r && !r.error) sent++;
+    } catch(e) { /* one failed file never blocks the report */ }
+  }
+  window.__docsTried = files.length; window.__docsSent = sent;
+  return sent;
+}
+function docsNote(gate){
+  const tried = window.__docsTried || 0, sent = window.__docsSent || 0;
+  if(!tried || !gate) return;
+  const p = document.createElement("p"); p.className = "optin-p";
+  p.textContent = sent === tried
+    ? "We also received your " + (sent === 1 ? "document" : sent + " documents") + ", stored privately for your Readiness Call."
+    : sent + " of " + tried + " documents arrived. Please bring the others to your Readiness Call, or reply to the report email with them.";
+  gate.appendChild(p);
+}
+
+
+/* ---- Before your call -------------------------------------------------------
+   An orange Book a call button opens this step instead of the calendar straight
+   away. It saves a copy of the founder's scan for the team (the same lead row and
+   report email as "Send me my report"), lists the documents we need for this
+   assessment, uploads any they attach, and opens the calendar in a new tab.
+   "Skip, just book" goes straight to the calendar. */
+function bookHref(){
+  const src = document.querySelector("#booking-cta, #bookBtn, #results a.cta, #fullReport a.cta");
+  return (src && src.href) || BOOKING_URL;
+}
+function openBookStep(e){
+  const step = document.getElementById("bookstep");
+  if(!step || step.dataset.done === "1") return;   // already through the step: book as normal
+  if(e) e.preventDefault();
+  const fill = function(from, to){ const a = document.getElementById(from), b = document.getElementById(to); if(a && b && !b.value) b.value = a.value; };
+  fill("ld-name", "bs-name"); fill("ld-email", "bs-email");
+  const known = window.__contact || {}, bn = document.getElementById("bs-name"), be = document.getElementById("bs-email");
+  if(bn && !bn.value && known.name) bn.value = known.name; if(be && !be.value && known.email) be.value = known.email;
+  if(window.__leadId){ const c = document.getElementById("bs-consent"); if(c) c.checked = true; }
+  const skip = document.getElementById("bs-skip"); if(skip) skip.href = bookHref();
+  step.style.display = "block";
+  step.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+async function continueToBooking(){
+  const err = document.getElementById("bs-error"), v = function(id){ return document.getElementById(id).value.trim(); };
+  const name = v("bs-name"), email = v("bs-email");
+  if(!name || !email){ err.textContent = "Please add your first name and email, so the team knows whose scan it is."; err.style.display = "block"; return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent = "That email address doesn't look right."; err.style.display = "block"; return; }
+  if(!document.getElementById("bs-consent").checked){ err.textContent = "Please tick the consent box so we can keep a copy of your scan."; err.style.display = "block"; return; }
+  const docErr = checkDocs(); if(docErr){ err.textContent = docErr; err.style.display = "block"; return; }
+  err.style.display = "none";
+  // Open the calendar now, while the click still counts, so the browser does not block it.
+  const href = bookHref(); let w = null;
+  try { w = window.open(href, "_blank"); if(w) w.opener = null; } catch(x) {}
+  const step = document.getElementById("bookstep"), status = document.getElementById("bs-status"), go = document.getElementById("bs-go");
+  step.dataset.done = "1"; if(go){ go.disabled = true; go.textContent = "Sending your scan…"; }
+  const known = window.__contact;
+  if(window.__leadId && known && (known.email.toLowerCase() !== email.toLowerCase() || known.name !== name)){
+    window.__leadId = null; window.__contact = null;   // different details: a new record, never the earlier one
+    const gate = document.getElementById("leadgate"); if(gate && gate.dataset.form) gate.innerHTML = gate.dataset.form;
+  }
+  if(window.__leadId){
+    if(sb && docFiles().length){ await uploadDocs(window.__leadId);
+      try { await Promise.race([sb.functions.invoke("send-report", { body: { lead_id: window.__leadId } }), new Promise(function(r){ setTimeout(r, 6000); })]); } catch(x) {} }
+  } else {
+    // Same save as "Send me my report": copy the details across and send.
+    const set = function(id, val){ const el = document.getElementById(id); if(el) el.value = val; };
+    set("ld-name", name); set("ld-email", email);
+    const c = document.getElementById("ld-consent"); if(c) c.checked = true;
+    await submitLead();
+  }
+  const tried = window.__docsTried || 0, sent = window.__docsSent || 0;
+  status.textContent = (window.__leadId ? "Thank you: we have a copy of your scan" : "Your booking page is open, but we could not save your scan just now")
+    + (tried ? (sent === tried ? (sent === 1 ? " and your document" : " and your " + sent + " documents") : ", and " + sent + " of " + tried + " documents") : "")
+    + ". " + (w ? "Your booking page opened in a new tab." : "Opening your booking page now…");
+  status.style.display = "block";
+  if(go){ go.textContent = "Open the booking page again"; go.disabled = false; go.onclick = function(){ const w2 = window.open(href, "_blank"); if(w2) w2.opener = null; }; }
+  if(!w) location.href = href;
+}
+document.addEventListener("click", function(e){
+  const a = e.target.closest && e.target.closest("a#book-top, #results a.cta, #fullReport a.cta, a#booking-cta, a#bookBtn");
+  if(a) openBookStep(e);
+});
+
+
+/* A new score may be a different founder on the same phone or laptop (as at
+   Female Founders Day): forget everything from the last one, so nobody's report,
+   email or documents can end up on someone else's record. */
+function resetForNewScore(){
+  window.__leadId = null; window.__contact = null; window.__docsTried = 0; window.__docsSent = 0;
+  ["leadgate", "bookstep"].forEach(function(id){
+    const el = document.getElementById(id); if(!el) return;
+    if(!el.dataset.form) el.dataset.form = el.innerHTML; else el.innerHTML = el.dataset.form;
+  });
+  const step = document.getElementById("bookstep"); if(step){ step.dataset.done = ""; step.style.display = "none"; }
+}
+
 async function submitLead(){
   if(!lastReport) return;
   const val = function(id){ const e = document.getElementById(id); return e ? e.value.trim() : ""; };
@@ -503,6 +649,7 @@ async function submitLead(){
   if(!contact.name || !contact.email){ err.textContent = "Please add your first name and email."; err.style.display = "block"; return; }
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact.email)){ err.textContent = "That email address doesn't look right."; err.style.display = "block"; return; }
   if(!document.getElementById("ld-consent").checked){ err.textContent = "Please tick the consent box so we can store your results."; err.style.display = "block"; return; }
+  const docErr = checkDocs(); if(docErr){ err.textContent = docErr; err.style.display = "block"; return; }
   err.style.display = "none";
   const btn = document.querySelector("#leadgate button"), label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "Sending…"; }
@@ -512,9 +659,12 @@ async function submitLead(){
     try { const res = await Promise.race([sb.from("leads").insert(Object.assign(buildLeadPayload(contact), {id: leadId, report_requested: true, report_html: reportHtml()})), new Promise(function(r){ setTimeout(function(){ r("timeout"); }, 6000); })]); saved = !!res && res !== "timeout" && !res.error; }
     catch(e) { /* never block the founder's results on a network failure */ }
   }
+  window.__docsTried = 0; window.__docsSent = 0;
+  if(leadId && saved && sb && docFiles().length){ const ub = document.querySelector("#leadgate button"); if(ub) ub.textContent = "Uploading documents…"; await uploadDocs(leadId); }
   try { if(leadId && saved) await Promise.race([sb.functions.invoke("send-report", { body: { lead_id: leadId } }), new Promise(function(r){ setTimeout(r, 6000); })]); }
   catch(e) { /* the copy is sent by the server; a slow send never blocks the founder */ }
   if(btn){ btn.disabled = false; btn.textContent = label; }
+  if(saved){ window.__leadId = leadId; window.__contact = { name: contact.name, email: contact.email }; }
   if(saved) showSent(contact.email); else showNotSaved();
 }
 function reportHtml(){
