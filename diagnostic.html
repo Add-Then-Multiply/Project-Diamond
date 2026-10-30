@@ -130,6 +130,10 @@ a.next-btn:hover{background:#FEF2F2;}
 .next-panel h2{font-family:Georgia,serif;font-size:1.25rem;color:#2B2A29;margin:0 0 0.4rem;}
 .next-panel p{font-size:0.92rem;color:#334155;margin:0 0 0.6rem;}
 @media print{.next-panel,.also-take{display:none!important;}}
+a.just-book{display:inline-block;padding:0.85rem 1.6rem;border-radius:6px;text-decoration:none;margin:0.5rem 0 0 0;vertical-align:top;}
+a.jump{margin-right:0.6rem;}
+.bookstep a.bs-skip{display:inline-block;flex:1 1 220px;text-align:center;background:#fff;color:#2B2A29;border:2px solid #F38E00;border-radius:6px;padding:0.9rem 1rem;font-size:1rem;font-weight:700;text-decoration:none;}
+.bookstep a.bs-skip:hover{background:#FFF7ED;}
 /* Book a call: brand orange with charcoal text (white on this orange fails contrast) */
 p.optin-book{margin:0 0 1.4rem;}
 a.book-top,a.cta:not(.nav-cta),a#booking-cta,a#bookBtn,a.book-cta{background:#F38E00!important;color:#2B2A29!important;border-color:#F38E00!important;font-weight:700;}
@@ -154,7 +158,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
   <span class="kicker rise">The Multiplier Diagnostic · 20 questions · 3 minutes · instant results</span>
   <h1 class="rise d1">Is your business ready to multiply?</h1>
   <p class="lede rise d2">Growing organically is slow. Businesses that fund, acquire, consolidate and exit multiply instead. This diagnostic measures your readiness for exponential growth across six dimensions, and shows you exactly where to start. Answer each question honestly, on a scale from "not at all" to "completely".</p>
-<p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#diag">Do the assessment</a><span class="jumpnote">Twenty questions, about three minutes. Free. You get your score and your weak points on screen straight away. Want help with them? Book a free 30-minute call and we take it from there.</span></p>
+<p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#diag">Do the assessment</a><a class="book-cta just-book" href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" target="_blank" rel="noopener">Just book a call</a><span class="jumpnote">Twenty questions, about three minutes. Free. You get your score and your weak points on screen straight away. Prefer to talk first? Just book the free 30-minute call: the assessment, and anything you upload, is optional.</span></p>
 <p class="also-take rise d3"><span class="also-lead">Thinking about a sale? Two more free assessments go deeper:</span><a class="next-btn" href="transaction-readiness.html">Transaction Readiness Assessment: 24 metrics</a><a class="next-btn" href="personal-exit-readiness.html">Personal Exit Readiness: you, not the business</a></p>
   <p class="rise d3" style="max-width:66ch;color:#334155;font-size:0.92rem;margin-top:0.8rem;"><b style="color:var(--navy);">Arrived here from Exit Ready, or not sure where to start?</b> Either way this is the right first step. An exit is decided by the whole business, so we read all six dimensions before going deeper, and your answers on funding and exit carry extra weight in the score. If the result points to a sale, your report offers the <a href="transaction-readiness.html">Transaction Readiness Assessment</a>: 24 metrics at the depth a buyer's advisers would test. And because an exit is a life event, there is a separate ten-minute <a href="personal-exit-readiness.html">Personal Exit Readiness</a> self-assessment for you rather than the business.</p>
   <form id="diag"></form>
@@ -169,7 +173,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
     </div>
     <section id="bookstep" class="optin bookstep" style="display:none;" aria-labelledby="bs-h">
   <h2 class="optin-h" id="bs-h">Before your call</h2>
-  <p class="optin-p">Your free 30-minute call starts from where you are. Press the button and we keep a copy of your scan, so the team can read your score and your weak points before you talk. If you have any of the documents below, attach them too: rough drafts are fine, and none of them is required.</p>
+  <p class="optin-p"><b>Everything here is optional.</b> Your free 30-minute call starts from where you are. Press the button and we keep a copy of your scan, so the team can read your score and your weak points before you talk. If you have any of the documents below, attach them too: rough drafts are fine, and none of them is required.</p>
   <div class="optin-main">
     <label for="bs-name">First name<input id="bs-name" type="text" autocomplete="given-name"></label>
     <label for="bs-email">Email<input id="bs-email" type="email" autocomplete="email" inputmode="email"></label>
@@ -177,7 +181,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
   <div class="optin-docs"><p class="optin-sub" style="margin-top:0;">What we need for this review, if you have it</p><ul class="optin-list"><li>Growth plan or roadmap</li><li>Latest management accounts</li><li>6 to 12-month cash flow forecast</li><li>Organisation chart</li><li>Any recent valuation</li><li>Funding history for the last two years</li></ul><label for="ld-files" style="margin-top:0.7rem;">Attach documents (optional)<input id="ld-files" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv"></label><p class="optin-hint">Up to five files, 20MB each: PDF, Word, Excel, PowerPoint or CSV. They go to a private folder that only our team can open.</p></div>
   <label class="optin-consent" for="bs-consent"><input id="bs-consent" type="checkbox">I agree to Add Then Multiply storing my answers and documents and contacting me about my results.</label>
   <p id="bs-error" class="optin-err" role="alert"></p>
-  <div class="bs-actions"><button type="button" class="bs-go" id="bs-go" onclick="continueToBooking()">Continue to booking</button><a class="bs-skip" id="bs-skip" target="_blank" rel="noopener" href="#">Skip, just book</a></div>
+  <div class="bs-actions"><button type="button" class="bs-go" id="bs-go" onclick="continueToBooking()">Continue to booking</button><a class="bs-skip" id="bs-skip" target="_blank" rel="noopener" href="#">Book without documents</a></div>
   <p class="bs-status" id="bs-status" role="status"></p>
 </section>
     <section id="leadgate" class="optin" style="display:none;" aria-labelledby="optin-h">
@@ -254,6 +258,7 @@ function bookingUrl(ctx, search){
 }
 function setBooking(el, ctx){ try{ if(el) el.href = bookingUrl(ctx); }catch(e){ if(el) el.href = BOOKING_URL; } }
 document.querySelectorAll("a.nav-cta").forEach(function(a){ setBooking(a, null); }); /* the header button carries the campaign source too */
+document.querySelectorAll("a.just-book").forEach(function(a){ setBooking(a, null); }); /* "Just book a call": straight to the calendar, no assessment needed */
 
 const SUPABASE_URL ="https://wfejarowrlalwgbqvloi.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_m2UUeC-YZWe7UVyYX553SA_6jHP2M5x";
@@ -456,7 +461,7 @@ function docsNote(gate){
    away. It saves a copy of the founder's scan for the team (the same lead row and
    report email as "Send me my report"), lists the documents we need for this
    assessment, uploads any they attach, and opens the calendar in a new tab.
-   "Skip, just book" goes straight to the calendar. */
+   "Book without documents" goes straight to the calendar. */
 function bookHref(){
   const src = document.querySelector("#booking-cta, #bookBtn, #results a.cta, #fullReport a.cta");
   return (src && src.href) || BOOKING_URL;
@@ -586,7 +591,7 @@ function offerReport(){
     if(!document.getElementById("next-panel")){
       const q = location.search || "";
       const n = document.createElement("div"); n.id = "next-panel"; n.className = "next-panel";
-      n.innerHTML = '<h2>Your next assessment</h2><p>Your Multiplier Diagnostic is done. Go straight on to the next one: it picks up where this left off.</p>'
+      n.innerHTML = '<h2>Your next assessment</h2><p>Your Multiplier Diagnostic is done. Go straight on to the next one: it picks up where this left off. Optional, like everything here.</p>'
         + '<a class="jump" href="transaction-readiness.html' + q + '">Next: Transaction Readiness Assessment</a> '
         + '<a class="next-btn" href="personal-exit-readiness.html' + q + '">Personal Exit Readiness</a>';
       (step || b).after(n);

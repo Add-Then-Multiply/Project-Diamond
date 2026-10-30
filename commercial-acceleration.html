@@ -144,6 +144,10 @@ a.jump:hover{background:#A61D17;}
 .bookstep a.bs-skip{color:#2B2A29;font-weight:600;font-size:0.92rem;}
 .bookstep .bs-status{font-size:0.92rem;color:#15803D;font-weight:600;margin-top:0.8rem;display:none;}
 .q-pulse{outline:3px solid #C8231C;outline-offset:6px;border-radius:8px;transition:outline-color 0.6s;}
+a.just-book{display:inline-block;padding:0.85rem 1.6rem;border-radius:6px;text-decoration:none;margin:0.5rem 0 0 0;vertical-align:top;}
+a.jump{margin-right:0.6rem;}
+.bookstep a.bs-skip{display:inline-block;flex:1 1 220px;text-align:center;background:#fff;color:#2B2A29;border:2px solid #F38E00;border-radius:6px;padding:0.9rem 1rem;font-size:1rem;font-weight:700;text-decoration:none;}
+.bookstep a.bs-skip:hover{background:#FFF7ED;}
 /* Book a call: brand orange with charcoal text (white on this orange fails contrast) */
 p.optin-book{margin:0 0 1.4rem;}
 a.book-top,a.cta:not(.nav-cta),a#booking-cta,a#bookBtn,a.book-cta{background:#F38E00!important;color:#2B2A29!important;border-color:#F38E00!important;font-weight:700;}
@@ -166,7 +170,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
 <span class="kicker rise">Commercial Acceleration · framed for FACE · feeds Acquire, Consolidate and Exit</span>
 <h1 class="rise d1">Growth you can show, not just describe</h1>
 <p class="lede rise d2">Every conversation with an investor, a lender or a buyer comes back to the same question: where does the next pound of revenue come from, and how sure are you? Commercial Acceleration builds the answer. A proposition that is clear, pricing that holds, a pipeline you can forecast, and a sales process that runs without the founder in every deal.</p>
-<p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#assess">Do the assessment</a><span class="jumpnote">Eight statements, about ten minutes. Free. You get your score and your weak points on screen straight away. Want help with them? Book a free 30-minute call and we take it from there.</span></p>
+<p class="rise d3" style="margin-top:1rem;"><a class="jump" href="#assess">Do the assessment</a><a class="book-cta just-book" href="https://api.leadconnectorhq.com/widget/booking/Av6i7gL0YzbszYFfnKqQ" target="_blank" rel="noopener">Just book a call</a><span class="jumpnote">Eight statements, about ten minutes. Free. You get your score and your weak points on screen straight away. Prefer to talk first? Just book the free 30-minute call: the assessment, and anything you upload, is optional.</span></p>
 
 <p class="body" style="font-size:0.9rem;">Not sure whether the gap is the engine or you? The free <a href="founder-dependence.html">Founder Dependence</a> self-assessment tells you which dependence to remove first.</p>
 <h2>Who this is for</h2>
@@ -228,7 +232,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
   <span class="kicker">Your report</span>
   <section id="bookstep" class="optin bookstep" style="display:none;" aria-labelledby="bs-h">
   <h2 class="optin-h" id="bs-h">Before your call</h2>
-  <p class="optin-p">Your free 30-minute call starts from where you are. Press the button and we keep a copy of your scan, so the team can read your score and your weak points before you talk. If you have any of the documents below, attach them too: rough drafts are fine, and none of them is required.</p>
+  <p class="optin-p"><b>Everything here is optional.</b> Your free 30-minute call starts from where you are. Press the button and we keep a copy of your scan, so the team can read your score and your weak points before you talk. If you have any of the documents below, attach them too: rough drafts are fine, and none of them is required.</p>
   <div class="optin-main">
     <label for="bs-name">First name<input id="bs-name" type="text" autocomplete="given-name"></label>
     <label for="bs-email">Email<input id="bs-email" type="email" autocomplete="email" inputmode="email"></label>
@@ -236,7 +240,7 @@ a.book-top:hover,a.cta:not(.nav-cta):hover,a#booking-cta:hover,a#bookBtn:hover,a
   <div class="optin-docs"><p class="optin-sub" style="margin-top:0;">What we need for this review, if you have it</p><ul class="optin-list"><li>Sales pipeline with stages, values and conversion</li><li>Revenue by customer (top 1 and top 5)</li><li>Retention and churn: who stays, who leaves</li><li>Price list and discounting record</li><li>Your business case</li></ul><label for="ld-files" style="margin-top:0.7rem;">Attach documents (optional)<input id="ld-files" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv"></label><p class="optin-hint">Up to five files, 20MB each: PDF, Word, Excel, PowerPoint or CSV. They go to a private folder that only our team can open.</p></div>
   <label class="optin-consent" for="bs-consent"><input id="bs-consent" type="checkbox">I agree to Add Then Multiply storing my answers and documents and contacting me about my results.</label>
   <p id="bs-error" class="optin-err" role="alert"></p>
-  <div class="bs-actions"><button type="button" class="bs-go" id="bs-go" onclick="continueToBooking()">Continue to booking</button><a class="bs-skip" id="bs-skip" target="_blank" rel="noopener" href="#">Skip, just book</a></div>
+  <div class="bs-actions"><button type="button" class="bs-go" id="bs-go" onclick="continueToBooking()">Continue to booking</button><a class="bs-skip" id="bs-skip" target="_blank" rel="noopener" href="#">Book without documents</a></div>
   <p class="bs-status" id="bs-status" role="status"></p>
 </section>
   <section id="leadgate" class="optin" style="display:none;" aria-labelledby="optin-h">
@@ -319,6 +323,7 @@ function bookingUrl(ctx, search){
 }
 function setBooking(el, ctx){ try{ if(el) el.href = bookingUrl(ctx); }catch(e){ if(el) el.href = BOOKING_URL; } }
 document.querySelectorAll("a.nav-cta").forEach(function(a){ setBooking(a, null); }); /* the header button carries the campaign source too */
+document.querySelectorAll("a.just-book").forEach(function(a){ setBooking(a, null); }); /* "Just book a call": straight to the calendar, no assessment needed */
 document.querySelectorAll("a.cta").forEach(function(a){ setBooking(a, null); a.target="_blank"; a.rel="noopener"; });
 
 /* ---- Commercial Acceleration self-assessment ----------------------------------------
@@ -570,7 +575,7 @@ function docsNote(gate){
    away. It saves a copy of the founder's scan for the team (the same lead row and
    report email as "Send me my report"), lists the documents we need for this
    assessment, uploads any they attach, and opens the calendar in a new tab.
-   "Skip, just book" goes straight to the calendar. */
+   "Book without documents" goes straight to the calendar. */
 function bookHref(){
   const src = document.querySelector("#booking-cta, #bookBtn, #results a.cta, #fullReport a.cta");
   return (src && src.href) || BOOKING_URL;
